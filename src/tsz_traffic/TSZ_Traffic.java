@@ -18,6 +18,8 @@ public class TSZ_Traffic {
         // TODO code application logic here
         System.out.println("Hello World!!!");
         System.out.println("I LOVE ELLA!!");
+        
+        System.out.println("Tommy loves ELLA");
     }
     
 }
