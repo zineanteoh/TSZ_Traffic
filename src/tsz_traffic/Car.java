@@ -43,20 +43,20 @@ public class Car {
     
     public void closeIn(double increment, ArrayList<Car> cars, Road segment) { // this is called when traffic light is red
         double frontObjectYCoordinate;
-//        if (this.equals(cars.get(0))) { // if this car is the first car in the segment...
-//            frontObjectYCoordinate = segment.ROAD_LENGTH; // front 'object' is simply the end of segment
-//        } else { // if this car has some car in front
-//            this.frontCar = cars.get(cars.indexOf(this) - 1);
-//            frontObjectYCoordinate = this.frontCar.getY() + this.frontCar.speed * increment; // front 'object' is the car in front
-//        }
-//        
-//        if ( frontObjectYCoordinate - (this.y + this.LENGTH + this.speed * increment)  <= GAP_SPACE) {
-//            // if this car (travelling at current speed) will pass the object in front + gap,
-//            // stop car at exactly GAP_SPACE feet away from the object 
-//            this.y = frontObjectYCoordinate - GAP_SPACE - this.LENGTH;
-//        } else {
-//            this.y += this.speed * increment;
-//        }
+        if (this.equals(cars.get(0))) { // if this car is the first car in the segment...
+            frontObjectYCoordinate = segment.ROAD_LENGTH; // front 'object' is simply the end of segment
+        } else { // if this car has some car in front
+            this.frontCar = cars.get(cars.indexOf(this) - 1);
+            frontObjectYCoordinate = this.frontCar.getY() + this.frontCar.speed * increment; // front 'object' is the car in front
+        }
+        
+        if ( frontObjectYCoordinate - (this.y + this.LENGTH + this.speed * increment)  <= GAP_SPACE) {
+            // if this car (travelling at current speed) will pass the object in front + gap,
+            // stop car at exactly GAP_SPACE feet away from the object 
+            this.y = frontObjectYCoordinate - GAP_SPACE - this.LENGTH;
+        } else {
+            this.y += this.speed * increment;
+        }
     }
     
     public boolean noPossibleCollision() {
