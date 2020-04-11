@@ -33,11 +33,11 @@ public class Car {
         } else {
             // this car has a car in front... let's check for possible collision
             this.frontCar = cars.get(cars.indexOf(this) - 1);
-//            if (noPossibleCollision()) {
-//                this.y += this.speed * increment; // y coordinate of car after 0.1 seconds given its current speed
-//            } else {
-//                this.y += this.frontCar.speed * increment;
-//            }
+            if (noPossibleCollision()) {
+                this.y += this.speed * increment; // y coordinate of car after 0.1 seconds given its current speed
+            } else {
+                this.y += this.frontCar.speed * increment;
+            }
         }
     }
     
