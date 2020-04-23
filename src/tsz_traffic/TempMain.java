@@ -19,17 +19,17 @@ public class TempMain {
         simulationTime = 20;
         
         
-        /* Length of road of this crossroad
+        /* Length of road of the crossroad at SanLiTun
                         ||
-                        || <- 740ft 
+                        || <- 370ft 
                         ||
-            ==1400ft===[  ]===1700ft===
+            ===700ft===[  ]===1700ft===
                         ||
-                        || <- 1040ft
+                        || <- 520ft
                         ||                  
         Clarification: Two RoadSegments make up a Road   */
-        int[] horizontalRoad = {1400, 1700};    // left to right
-        int[] verticalRoad = {740, 1040};       // up to down
+        int[] horizontalRoad = {700, 850};    // left to right
+        int[] verticalRoad = {370, 520};       // up to down
         
         
         /* Light data (Takes in 3 inputs)
