@@ -30,7 +30,7 @@ public class Light {
     }
     
     public void update(double time) { // status quo function
-        time = Double.parseDouble(String.format("%.1f", time));
+        time = Double.parseDouble(String.format("%.1f", time)); // Can be removed since time is rounded to 1dp at the beginning of each loop
         if ((time - this.lastUpdatedTime) % this.updateTime == 0) {
             if (this.interrupted) {
                 this.interrupted = false;

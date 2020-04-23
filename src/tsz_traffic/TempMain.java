@@ -12,9 +12,11 @@ package tsz_traffic;
 
 public class TempMain {
     
+    public static double simulationTime;
+    
     public TempMain() {
         // Simulation duration in seconds
-        double simulationTime = 20;
+        simulationTime = 20;
         
         
         /* Length of road of this crossroad
@@ -46,11 +48,11 @@ public class TempMain {
         
         
         // Create a crossroad object
-        Crossroad cr = new Crossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight);
+        Crossroad cr = new Crossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight, simulationTime);
         
         
         // Simulate the crossroad
-        cr.run(simulationTime);
+        cr.runSimulation();
         
         
         

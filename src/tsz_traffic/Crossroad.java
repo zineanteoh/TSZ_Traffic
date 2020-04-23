@@ -19,15 +19,33 @@ import java.util.ArrayList;
 
 public class Crossroad {
     
-    public Crossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
+    public final static double TIME_INCREMENT = 0.1; // Duration of each loop in seconds
+    public final static int SLEEP_TIME = 100; // Duration of Thread.sleep() at the end of each loop in milliseconds
+    public Thread horizontalThread;
+    public Thread verticalThread;
+    public Thread dataThread;
+    static double endTime;
+    
+    public Crossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight, double endTime) {
+        // Create three threads, one for horizontal direction, one for vertical, one for data
+        horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL);
+        verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL);
+        dataThread = new Data();
         
-        Thread horizontal = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL);
-        Thread vertical = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL);
+        // Link horizontal and vertical threads (by setting oppositeRoad to each other) 
+        ((RoadSimulation) horizontalThread).setOppositeRoad(((RoadSimulation)verticalThread));
+        ((RoadSimulation) verticalThread).setOppositeRoad(((RoadSimulation)horizontalThread));
         
+        // END_TIME stores how long simulation lasts in seconds
+        Crossroad.endTime = endTime;
     }
     
-    public void run(double endTime) {
+    public void runSimulation() {
         // Start simulation. 
-        
+        horizontalThread.start();
+        try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
+        verticalThread.start();
+        try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
+        dataThread.start();
     }
 }
