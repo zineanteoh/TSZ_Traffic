@@ -40,9 +40,35 @@ public class RoadSimulation extends Thread {
             // Continue adding cars into the last segment of this road direction to simulate a congestion
 //            makeTrafficWorse(this.roadArray);
             
+//            // TEMPORARY: Print road
+//            if (this.DIRECTION == Road.HORIZONTAL) {
+//                printRoad(this.roadArray, time);
+//            }
+            
             // Make this thread go to sleep to allow other threads to run
             try {Thread.sleep(Crossroad.SLEEP_TIME);} catch (InterruptedException e) {System.out.println("Thread Interrupted");}
         }
+    }
+    
+    public void printRoad(ArrayList<Road> roadArray, double time) {
+        String output = "";
+        String tempString = "";
+        String inOutFluxString = "";
+        for (int roadIndex = 0; roadIndex < roadArray.size(); roadIndex++) {
+            // print traffic light state first
+            output = roadArray.get(roadIndex).getLights().printState() + output;
+            // print only front to end car of this road segment
+            tempString = roadArray.get(roadIndex).carArray.get(0).getCarNumber();
+            tempString = roadArray.get(roadIndex).carArray.get(roadArray.get(roadIndex).carArray.size() - 1).getCarNumber() + "_..._" + tempString;
+
+            output = String.format("%50s", tempString) + output;
+            inOutFluxString = "\t\t\t\t" + String.format("%20s", ("In/Out: " + roadArray.get(roadIndex).getInflux(roadArray, roadIndex) + "/" + roadArray.get(roadIndex).getOutflux())) + inOutFluxString;
+        }
+        System.out.println("");
+        System.out.println("Time: " + Double.parseDouble(String.format("%.1f", time)));
+        System.out.println(output);
+        System.out.println(inOutFluxString);
+        System.out.println("");
     }
     
     public void setOppositeRoad(RoadSimulation road) {
@@ -122,7 +148,7 @@ public class RoadSimulation extends Thread {
             roadArray.get(index).removeCar(frontCar);
             // Add this car object to the road segment infront if there is one available (when index > 0)
             if (index > 0) {
-                roadArray.get(index).addCar(frontCar);
+                roadArray.get(index - 1).addCar(frontCar);
             }
         }
     }
