@@ -1,3 +1,11 @@
+
+/*
+[Tommy]
+Tasks: 
+    Implement randomization of car properties that happens within car class 
+    Randomized initialization and utilization of car acceleration
+*/
+
 package tsz_traffic;
 
 import java.util.ArrayList;

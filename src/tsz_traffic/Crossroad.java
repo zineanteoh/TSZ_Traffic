@@ -7,8 +7,8 @@
     Car.Y is the butt of the car, while (Car.Y + Car.length) is the head of the car
 
    Tasks: 
-    [Tommy] Implement randomization of car properties that happens within car class 
     [Selena] Science behind traffic lights (How to sync our 4 traffic lights?)
+    [Tommy] Implement randomization of car properties that happens within car class 
     [Tommy] Randomized initialization and utilization of car acceleration
     [Zi] Trigger a congestion at the crossroad. And then test our solution
     

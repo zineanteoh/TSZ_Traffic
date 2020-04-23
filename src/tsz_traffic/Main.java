@@ -16,8 +16,8 @@ public class Main {
     
     public Main() {
         
-        // Simulation duration in seconds
-        simulationTime = 2;
+        // Simulation duration, in seconds
+        simulationTime = 10;
         
         
         /* Simulating one of SanLiTun's crossroad: 
@@ -37,9 +37,9 @@ public class Main {
             1st 
                 Starting Light State: Light.GREEN or Light.RED
             2nd 
-                Duration of state in seconds
+                Duration of state, in seconds
             3rd
-                Time left until state changes in seconds    */
+                Time left until state changes, in seconds    */
         Light[] horizontalLight = new Light[2];
         horizontalLight[0] = new Light(Light.GREEN, 4, 0);   // traffic light for end of left segment 
         horizontalLight[1] = new Light(Light.GREEN, 4, 2);   // traffic light for end of right segment
