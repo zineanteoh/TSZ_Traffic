@@ -4,11 +4,12 @@
     But elements in object arrays are ordered in the opposite way (index 0 connotes right-most / down-most object)
     Cars coordinate Y = 0 connotes the part of the road segment that is furthest from traffic light
         So when (car.y + car.length) > roadSegment.length, car is outside this road segment
+    Car.Y is the butt of the car, while (Car.Y + Car.length) is the head of the car
 
     [Tommy] Implement randomization of car properties that happens within car class 
     [Selena] Science behind traffic lights (How to sync our 4 traffic lights?)
     [Tommy] Randomized initialization and utilization of car acceleration
-
+    [Zi] Trigger a congestion at the crossroad. And then test our solution
     
     *** Our solution is essentially making traffic lights smarter ***
 */
@@ -24,9 +25,18 @@ public class Crossroad {
     public Thread horizontalThread;
     public Thread verticalThread;
     public Thread dataThread;
-    static double endTime;
+    public static double endTime;
+    public static ArrayList<Crossroad> crossroads;
     
-    public Crossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight, double endTime) {
+    public Crossroad(double endTime) {
+        // Create an empty ArrayList of Crossroads
+        this.crossroads = new ArrayList<Crossroad>();
+        
+        // END_TIME stores how long simulation lasts in seconds
+        this.endTime = endTime;
+    }
+    
+    public Crossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
         // Create three threads, one for horizontal direction, one for vertical, one for data
         horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL);
         verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL);
@@ -35,17 +45,20 @@ public class Crossroad {
         // Link horizontal and vertical threads (by setting oppositeRoad to each other) 
         ((RoadSimulation) horizontalThread).setOppositeRoad(((RoadSimulation)verticalThread));
         ((RoadSimulation) verticalThread).setOppositeRoad(((RoadSimulation)horizontalThread));
-        
-        // END_TIME stores how long simulation lasts in seconds
-        Crossroad.endTime = endTime;
+    }
+    
+    public void addCrossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
+        this.crossroads.add(new Crossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight));
     }
     
     public void runSimulation() {
         // Start simulation. 
-        horizontalThread.start();
-        try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
-        verticalThread.start();
-        try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
-        dataThread.start();
+        for (Crossroad cr : crossroads) {
+            cr.horizontalThread.start();
+            try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
+            cr.verticalThread.start();
+            try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
+            cr.dataThread.start();
+        }
     }
 }

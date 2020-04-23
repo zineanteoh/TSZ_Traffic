@@ -1,15 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tsz_traffic;
 
 import java.util.ArrayList;
-/**
- *
- * @author Zi Nean Teoh
- */
+
 public class Road {
     public ArrayList<Car> carArray;
     final int ROAD_LENGTH;
@@ -69,14 +61,14 @@ public class Road {
         this.carArray.add(car);
     }
 
-    public Road addCar(Car car) {
+    public void addCar(Car car) {
         this.carArray.add(car);
-        return this;
+//        return this;
     }
 
-    public Road removeCar(Car lastCar) {
+    public void removeCar(Car lastCar) {
         this.carArray.remove(lastCar);
-        return this;
+//        return this;
     }
 
     public int getOutflux() {

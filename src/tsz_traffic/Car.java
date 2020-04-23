@@ -1,6 +1,3 @@
-
-
-
 package tsz_traffic;
 
 import java.util.ArrayList;
