@@ -19,7 +19,8 @@ public class Main {
     static int interrupted = 0;
 
     public static void main(String[] args) {
-        runSimulation();
+        new TempMain();
+//        runSimulation();
     }
 
     public static void runSimulation() {
