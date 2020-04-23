@@ -16,12 +16,15 @@ public class Road {
     public Light light;
     public int outflux = 0, influx = 0;
     final double CHECK = 0.8;
-    public int carCounter = 1;
+    final int DIRECTION;        // 0 = horizontal; 1 = vertical
+    static final int HORIZONTAL = 0;
+    static final int VERTICAL = 1;
     
-    public Road(int roadLength, Light light) {
+    public Road(int roadLength, Light light, int direction) {
         this.ROAD_LENGTH = roadLength; // length of segment + the crossroad behind
         this.carArray = new ArrayList<Car>();
         this.light = light;
+        this.DIRECTION = direction;
     }
     
     public void goCars(double increment) {

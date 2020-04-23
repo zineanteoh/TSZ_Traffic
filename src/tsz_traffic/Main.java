@@ -36,7 +36,7 @@ public class Main {
 
         // Populate each road segment with cars to start our simulation
         for (int i = 0; i < roadLength.length; i++) {
-            roadArray.add(new Road(roadLength[roadLength.length - i - 1], lightArray[roadLength.length - i - 1]));
+            roadArray.add(new Road(roadLength[roadLength.length - i - 1], lightArray[roadLength.length - i - 1], Road.HORIZONTAL));
             roadArray.set(i, populate(roadArray.get(i)));
         }
         
