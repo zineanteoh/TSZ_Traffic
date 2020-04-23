@@ -14,7 +14,7 @@ public class Main {
     
     public static double simulationTime;
     
-    public Main() {
+    public static void main(String[] args) {
         
         // Simulation duration, in seconds
         simulationTime = 10;

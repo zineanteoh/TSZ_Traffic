@@ -52,7 +52,7 @@ public class Crossroad {
         this.crossroads.add(new Crossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight));
     }
     
-    public void runSimulation() {
+    public void runSimulation() throws InterruptedException {
         // Start simulation. 
         for (Crossroad cr : crossroads) {
             cr.horizontalThread.start();
@@ -60,6 +60,7 @@ public class Crossroad {
             cr.verticalThread.start();
             try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
             cr.dataThread.start();
+            try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
         }
     }
 }

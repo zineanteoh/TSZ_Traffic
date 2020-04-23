@@ -2,7 +2,7 @@ package tsz_traffic;
 
 import java.util.ArrayList;
 
-public class RoadSimulation extends Thread{
+public class RoadSimulation extends Thread {
     
     private static int POPULATE_GAP = 20; // Distance between each populated car in feet 
     public int carCounter;
@@ -38,10 +38,10 @@ public class RoadSimulation extends Thread{
             }
             
             // Continue adding cars into the last segment of this road direction to simulate a congestion
-            makeTrafficWorse(this.roadArray);
+//            makeTrafficWorse(this.roadArray);
             
             // Make this thread go to sleep to allow other threads to run
-            try {Thread.sleep(Crossroad.SLEEP_TIME);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
+            try {Thread.sleep(Crossroad.SLEEP_TIME);} catch (InterruptedException e) {System.out.println("Thread Interrupted");}
         }
     }
     
@@ -49,7 +49,7 @@ public class RoadSimulation extends Thread{
         this.oppositeRoad = road;
     }
     
-    private ArrayList<Road> populateRoadArray(ArrayList<Road> roadArray, int[] roadData, Light[] lightData, int direction) {
+    private synchronized ArrayList<Road> populateRoadArray(ArrayList<Road> roadArray, int[] roadData, Light[] lightData, int direction) {
         // Create road objects based on roadData and lightData, then add to roadArray
         for (int i = roadData.length - 1; i >= 0; i--) {
             Road tempRoad = new Road(roadData[i], lightData[i], direction);     // Store road data and light data onto a temp Road variable
@@ -65,7 +65,7 @@ public class RoadSimulation extends Thread{
         // Note: roadArray is ordered in a way that index 0 connotes right-most/down-most road segment
     }
     
-    private Road populate(Road roadSegment) {
+    private synchronized Road populate(Road roadSegment) {
         // Populate cars all the way from the end to the beginning of road segment
         int segmentLength = roadSegment.getLength();
         for (int coordinate = segmentLength - POPULATE_GAP; coordinate > POPULATE_GAP; coordinate -= POPULATE_GAP) {
@@ -76,7 +76,7 @@ public class RoadSimulation extends Thread{
         return roadSegment;
     }
     
-    private void updateLightOfRoad(double time, int index, ArrayList<Road> roadArray) {
+    private synchronized void updateLightOfRoad(double time, int index, ArrayList<Road> roadArray) {
         if (index == 0) {
             // Index = 0 means that this road is the first segment 
             // No density check required because there are no roads infront
@@ -103,7 +103,7 @@ public class RoadSimulation extends Thread{
         }
     }
     
-    private void updateCarOfRoad(int index, ArrayList<Road> roadArray) { 
+    private synchronized void updateCarOfRoad(int index, ArrayList<Road> roadArray) { 
         // If Green light, get cars to go
         // If Red light, get cars to slow down and close in
         if (roadArray.get(index).getLights().isGreen()) {
@@ -113,7 +113,7 @@ public class RoadSimulation extends Thread{
         }
     }
     
-    private void updateRoadArray(int index, ArrayList<Road> roadArray) {
+    private synchronized void updateRoadArray(int index, ArrayList<Road> roadArray) {
         // Check to see if any cars have 'exited' this road segment (its relative coordinate exceeded the road length)
         if (roadArray.get(index).carExit()) {
             // Get the front most car from this road segment
@@ -127,14 +127,14 @@ public class RoadSimulation extends Thread{
         }
     }
     
-    private void makeTrafficWorse(ArrayList<Road> roadArray) {
+    private synchronized void makeTrafficWorse(ArrayList<Road> roadArray) {
         int lastRoadIndex = roadArray.size() - 1;
         int lastCarIndex = roadArray.get(lastRoadIndex).carArray.size() - 1;
         
         // While the last car (of the last road segment) has given enough space for a new car, add a new car
         double lastCarCoordinate = roadArray.get(lastRoadIndex).carArray.get(lastCarIndex).getY();
-        while (lastCarCoordinate > POPULATE_GAP) {
-            Car tempCar = new Car(this.carCounter++, lastCarCoordinate + POPULATE_GAP);
+        while (lastCarCoordinate > POPULATE_GAP * 10) {
+            Car tempCar = new Car(this.carCounter++, lastCarCoordinate + (POPULATE_GAP * 10));
             roadArray.get(lastRoadIndex).addCar(tempCar);
         }
     }
