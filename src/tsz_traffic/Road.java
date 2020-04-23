@@ -16,6 +16,7 @@ public class Road {
     public Light light;
     public int outflux = 0, influx = 0;
     final double CHECK = 0.8;
+    public int carCounter = 1;
     
     public Road(int roadLength, Light light) {
         this.ROAD_LENGTH = roadLength; // length of segment + the crossroad behind

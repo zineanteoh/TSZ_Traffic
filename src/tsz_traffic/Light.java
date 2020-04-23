@@ -11,6 +11,8 @@ package tsz_traffic;
  */
 public class Light {
     
+    public final static int GREEN = 1;
+    public final static int RED = 0;
     final static String[] STATE = {"red", "green"};
     private String state;
     double updateTime;

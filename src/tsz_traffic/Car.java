@@ -1,15 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tsz_traffic;
 
 import java.util.ArrayList;
-/**
- *
- * @author Zi Nean Teoh
- */
+
 public class Car {
     
     final double LENGTH;
@@ -17,6 +9,13 @@ public class Car {
     Car frontCar;
     final static double GAP_SPACE = 2;
     final int carNumber;
+    
+    public Car(int index, double y) {
+        // randomize all other properties of car (length, speed, +acceleration????)
+        this(index, y, 13 + (int) (Math.random() * 5), 30 + (int) (Math.random() * 15));
+        // car length ranges from 13 to (13+4=17) feet
+        // car speed ranges from 30 to (30+14=44) feet
+    }
     
     public Car(int index, double y, double length, double speed) {
         this.carNumber = index;
