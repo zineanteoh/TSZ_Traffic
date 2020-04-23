@@ -38,6 +38,7 @@ public class RoadSimulation extends Thread {
             }
             
             // Continue adding cars into the last segment of this road direction to simulate a congestion
+            // COMMENTED THIS OUT FOR NOW
 //            makeTrafficWorse(this.roadArray);
             
 //            // TEMPORARY: Print road
