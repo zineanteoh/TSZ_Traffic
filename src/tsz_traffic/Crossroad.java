@@ -6,6 +6,7 @@
         So when (car.y + car.length) > roadSegment.length, car is outside this road segment
     Car.Y is the butt of the car, while (Car.Y + Car.length) is the head of the car
 
+   Tasks: 
     [Tommy] Implement randomization of car properties that happens within car class 
     [Selena] Science behind traffic lights (How to sync our 4 traffic lights?)
     [Tommy] Randomized initialization and utilization of car acceleration

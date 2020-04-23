@@ -20,7 +20,7 @@ public class Main {
         simulationTime = 2;
         
         
-        /* Length of road of the crossroad at SanLiTun
+        /* Simulating one of SanLiTun's crossroad: 
                         ||
                         || <- 370ft 
                         ||
