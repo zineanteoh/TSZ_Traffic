@@ -14,10 +14,10 @@ public class Main {
     
     public static double simulationTime;
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         
         // Simulation duration, in seconds
-        simulationTime = 10;
+        simulationTime = 5;
         
         
         /* Simulating one of SanLiTun's crossroad: 

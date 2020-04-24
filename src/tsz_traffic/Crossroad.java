@@ -39,9 +39,10 @@ public class Crossroad {
     
     public Crossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
         // Create three threads, one for horizontal direction, one for vertical, one for data
-        horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL);
-        verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL);
-        dataThread = new Data();
+        ResourceLock lock = new ResourceLock();
+        horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock);
+        verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock);
+        dataThread = new Data(lock);
         
         // Link horizontal and vertical threads (by setting oppositeRoad to each other) 
         ((RoadSimulation) horizontalThread).setOppositeRoad(((RoadSimulation)verticalThread));
@@ -56,11 +57,8 @@ public class Crossroad {
         // Start simulation. 
         for (Crossroad cr : crossroads) {
             cr.horizontalThread.start();
-            try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
             cr.verticalThread.start();
-            try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
             cr.dataThread.start();
-            try {Thread.sleep(10);} catch (InterruptedException e) {System.out.println("ThreadInterrupted");}
         }
     }
 }
