@@ -48,12 +48,6 @@ public class RoadSimulation extends Thread {
                     // Continue adding cars into the last segment of this road direction to simulate a congestion
                     makeTrafficWorse(this.roadArray);
                     
-                    // Make this thread go to sleep to allow other threads to run
-                    try {
-                        Thread.sleep(Crossroad.SLEEP_TIME);
-                    } catch (InterruptedException e) {
-                        System.out.println("Thread Interrupted");
-                    }
                     lock.flag = this.DIRECTION + 1;
                     lock.notifyAll(); // Wakes up all threads that are waiting on this object's monitor
                 }

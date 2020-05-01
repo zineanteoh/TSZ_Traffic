@@ -35,13 +35,6 @@ public class Data extends Thread {
                     // REPEAT for verticalThread
                     // TODO...
                     
-                    
-                    // Make this thread go to sleep to allow other threads to run
-                    try {
-                        Thread.sleep(Crossroad.SLEEP_TIME);
-                    } catch (InterruptedException e) {
-                        System.out.println("ThreadInterrupted");
-                    }
                     lock.flag = 0;
                     lock.notifyAll();
                 }
