@@ -11,18 +11,20 @@ public class Road {
     final int DIRECTION;        // 0 = horizontal; 1 = vertical
     static final int HORIZONTAL = 0;
     static final int VERTICAL = 1;
+    private boolean blocked;
     
     public Road(int roadLength, Light light, int direction) {
         this.ROAD_LENGTH = roadLength; // length of segment + the crossroad behind
         this.carArray = new ArrayList<Car>();
         this.light = light;
         this.DIRECTION = direction;
+        this.blocked = false;
     }
     
     public void goCars(double increment) {
         // but we need to take into account of the delay caused by reaction time and interaction between cars
         for (Car c : this.carArray) {
-            c.go(increment, this.carArray);
+            c.go(increment, this.carArray, this.blocked);
         }
     }
 
@@ -63,12 +65,10 @@ public class Road {
 
     public void addCar(Car car) {
         this.carArray.add(car);
-//        return this;
     }
 
     public void removeCar(Car lastCar) {
         this.carArray.remove(lastCar);
-//        return this;
     }
 
     public int getOutflux() {
@@ -76,16 +76,16 @@ public class Road {
         if (this.getLights().isGreen()) {
             for (int i = 0; i < this.carArray.size(); i++) {
                 if (i == 0) {
-                    if (((this.ROAD_LENGTH - this.carArray.get(i).y) / this.carArray.get(i).speed) < 5) {
+                    if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).speed) < 5) {
                         this.outflux++;
                     }
                 } else {
                     if (this.carArray.get(i).speed > this.carArray.get(i - 1).speed) {
-                        if (((this.ROAD_LENGTH - this.carArray.get(i).y) / this.carArray.get(i - 1).speed) < 5) {
+                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i - 1).speed) < 5) {
                             this.outflux++;
                         }
                     } else {
-                        if (((this.ROAD_LENGTH - this.carArray.get(i).y) / this.carArray.get(i).speed) < 5) {
+                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).speed) < 5) {
                             this.outflux++;
                         }
                     }
@@ -114,6 +114,10 @@ public class Road {
     public Car getFrontCar() {
         return this.carArray.get(0);
     }
+    
+    public Car getLastCar() {
+        return this.carArray.get(this.carArray.size() - 1);
+    }
 
     public int getLength() {
         return this.ROAD_LENGTH;
@@ -127,4 +131,12 @@ public class Road {
         return this.carArray;
     }
     
+    public boolean isBlocked() {
+        return this.blocked;
+    }
+    
+    public void setBlocked(boolean condition) {
+        this.blocked = condition;
+    }
+        
 }

@@ -28,20 +28,24 @@ public class Crossroad {
     public Thread dataThread;
     public static double endTime;
     public static ArrayList<Crossroad> crossroads;
+    public double roadWidth;
     
-    public Crossroad(double endTime) {
+    public Crossroad(double endTime, double roadWidth) {
         // Create an empty ArrayList of Crossroads
         this.crossroads = new ArrayList<Crossroad>();
         
         // END_TIME stores how long simulation lasts in seconds
         this.endTime = endTime;
+        
+        // Stores the width of each road, in feet
+        this.roadWidth = roadWidth;
     }
     
     public Crossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
         // Create three threads, one for horizontal direction, one for vertical, one for data
         ResourceLock lock = new ResourceLock();
-        horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock);
-        verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock);
+        horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock, this.roadWidth);
+        verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock, this.roadWidth);
         dataThread = new Data(lock);
         
         // Link horizontal and vertical threads (by setting oppositeRoad to each other) 

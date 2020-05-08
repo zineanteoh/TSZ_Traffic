@@ -13,7 +13,8 @@ import java.util.ArrayList;
 public class Car {
     
     final double LENGTH;
-    public double y, speed, acceleration, reactionTime;
+    public double speed, acceleration, reactionTime;
+    private double y;
     Car frontCar;
     final static double GAP_SPACE = 2;
     final int carNumber;
@@ -33,10 +34,15 @@ public class Car {
         this.frontCar = null;
     }
     
-    public void go(double increment, ArrayList<Car> cars) { // increment is in seconds (e.g. 0.1 seconds)
+    public void go(double increment, ArrayList<Car> cars, boolean blocked) { // increment is in seconds (e.g. 0.1 seconds)
         if (this.equals(cars.get(0))) {
-            // this car is at the front. so just go!
-            this.y += this.speed * increment;
+            // this car is at the front. CHECK for blockage caused by opposing lane
+            if (blocked) {
+                // if blocked, decelerate
+                
+            } else {
+                this.y += this.speed * increment;
+            }
         } else {
             // this car has a car in front... let's check for possible collision
             this.frontCar = cars.get(cars.indexOf(this) - 1);
@@ -77,6 +83,10 @@ public class Car {
     
     public double getY() {
         return this.y;
+    }
+    
+    public void resetY() {
+        this.y = 0;
     }
     
     public double getLength() {

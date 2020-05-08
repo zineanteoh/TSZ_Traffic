@@ -10,14 +10,16 @@ public class RoadSimulation extends Thread {
     public RoadSimulation oppositeRoad;
     public ArrayList<Road> roadArray;
     ResourceLock lock;
+    private double roadWidth;
 
-    public RoadSimulation(int[] roadData, Light[] lightData, int direction, ResourceLock lock) {
+    public RoadSimulation(int[] roadData, Light[] lightData, int direction, ResourceLock lock, double roadWidth) {
         this.lock = lock;
         this.DIRECTION = direction;
         this.carCounter = 1;
         this.roadArray = new ArrayList<>();                                                             // Create a road array
         this.roadArray = populateRoadArray(this.roadArray, roadData, lightData, this.DIRECTION);        // Populate the road array based on road and light data
         this.oppositeRoad = null;
+        this.roadWidth = roadWidth;
         System.out.println("Creating Thread " + (this.DIRECTION + 1) + "...");
     }
 
@@ -145,6 +147,20 @@ public class RoadSimulation extends Thread {
         } else {
             roadArray.get(index).closeInCars(Crossroad.TIME_INCREMENT);
         }
+        
+        // Check the front road (index 0) for blocked crossroad
+        if(index == 0) { 
+            // Check the y coordinate of the last car
+            double lastCarY = roadArray.get(index).getLastCar().getY();
+            if (lastCarY <= this.roadWidth) {
+                // opposing lane is blocked
+                this.oppositeRoad.roadArray.get(1).setBlocked(true);
+            } else {
+                // opposing lane is not blocked
+                this.oppositeRoad.roadArray.get(1).setBlocked(false);
+            }
+        }
+        
     }
 
     private synchronized void updateRoadArray(int index, ArrayList<Road> roadArray) {
@@ -156,6 +172,8 @@ public class RoadSimulation extends Thread {
             roadArray.get(index).removeCar(frontCar);
             // Add this car object to the road segment infront if there is one available (when index > 0)
             if (index > 0) {
+                // Set this car's y coordinate to 0
+                frontCar.resetY();
                 roadArray.get(index - 1).addCar(frontCar);
             }
         }

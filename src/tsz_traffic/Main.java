@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         
         // Simulation duration, in seconds
-        simulationTime = 5;
+        simulationTime = 10;
         
         
         /* Simulating one of SanLiTun's crossroad: 
@@ -31,6 +31,7 @@ public class Main {
         Clarification: Two RoadSegments make up a Road   */
         int[] horizontalRoad = {700, 850};    // left to right
         int[] verticalRoad = {370, 520};       // up to down
+        double roadWidth = 20; // The middle [  ] is a 20x20 crossroad
         
         
         /* Light data (Takes in 3 inputs)
@@ -49,7 +50,8 @@ public class Main {
         
         
         // Create a crossroad
-        Crossroad cr = new Crossroad(simulationTime);
+        Crossroad cr = new Crossroad(simulationTime, roadWidth);
+        
         // Add a crossroad
         cr.addCrossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight);
         
