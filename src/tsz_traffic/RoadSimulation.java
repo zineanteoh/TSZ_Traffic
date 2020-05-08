@@ -49,7 +49,7 @@ public class RoadSimulation extends Thread {
 
                     // Continue adding cars into the last segment of this road direction to simulate a congestion
                     makeTrafficWorse(this.roadArray);
-                    
+
                     lock.flag = this.DIRECTION + 1;
                     lock.notifyAll(); // Wakes up all threads that are waiting on this object's monitor
                 }
@@ -147,9 +147,9 @@ public class RoadSimulation extends Thread {
         } else {
             roadArray.get(index).closeInCars(Crossroad.TIME_INCREMENT);
         }
-        
+
         // Check the front road (index 0) for blocked crossroad
-        if(index == 0) { 
+        if (index == 0) {
             // Check the y coordinate of the last car
             double lastCarY = roadArray.get(index).getLastCar().getY();
             if (lastCarY <= this.roadWidth) {
@@ -160,7 +160,7 @@ public class RoadSimulation extends Thread {
                 this.oppositeRoad.roadArray.get(1).setBlocked(false);
             }
         }
-        
+
     }
 
     private synchronized void updateRoadArray(int index, ArrayList<Road> roadArray) {
@@ -189,5 +189,9 @@ public class RoadSimulation extends Thread {
             Car tempCar = new Car(this.carCounter++, lastCarCoordinate + (POPULATE_GAP));
             roadArray.get(lastRoadIndex).addCar(tempCar);
         }
+    }
+
+    public String getFrontMostCar() {
+        return this.roadArray.get(0).getFrontCar().getCarNumber();
     }
 }
