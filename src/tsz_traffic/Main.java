@@ -21,13 +21,17 @@ public class Main {
         
         
         /* Simulating one of SanLiTun's crossroad: 
-                        ||
-                        || <- 370ft 
-                        ||
+                      ↓ ||
+                      ↓ ||
+                      1 || <- 370ft 
+                      ↓ ||
+          -> -> 1 -> -> || -> ->0-> ->      //direction of cars and road index
             ===700ft===[  ]===850ft===
-                        ||
-                        || <- 520ft
-                        ||                  
+                      ↓ ||
+                      ↓ ||
+                      0 || <- 520ft
+                      ↓ ||              
+                      ↓ ||
         Clarification: Two RoadSegments make up a Road   */
         int[] horizontalRoad = {700, 850};    // left to right
         int[] verticalRoad = {370, 520};       // up to down
