@@ -1,1 +1,505 @@
-0	0	9	8	0	1	0	9	7	0	1	0	8	7	0	1	0	9	8	0	1	0	9	8	0	1	0	9	7	0	1	0	9	7	0	2	0	8	7	0	2	0	8	9	0	2	0	8	10	0	2	0	8	13	0	2	0	8	14	0	2	0	8	14	0	2	0	7	16	0	3	0	7	18	0	3	0	7	19	0	3	0	9	21	0	3	0	9	22	0	3	0	9	24	0	3	0	8	25	0	4	0	0	26	10	4	0	0	27	10	4	0	0	28	11	5	0	0	30	11	5	0	0	30	12	5	0	0	32	12	6	0	0	33	12	6	0	0	34	12	6	0	0	35	12	7	0	0	36	12	7	0	0	36	12	
+TotalCarPassed
+0, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+1, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+1, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+1, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+1, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+1, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+2, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+2, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+2, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+2, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+3, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+3, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+3, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+3, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+4, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+4, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+4, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+4, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+4, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+4, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+5, Vertical1Influx
+10, Vertical2Influx
+11, Vertical3Influx
+11, 0
+TotalCarPassed
+5, Vertical1Influx
+10, Vertical2Influx
+10, Vertical3Influx
+13, 0
+TotalCarPassed
+5, Vertical1Influx
+10, Vertical2Influx
+11, Vertical3Influx
+13, 0
+TotalCarPassed
+6, Vertical1Influx
+10, Vertical2Influx
+11, Vertical3Influx
+12, 0
+TotalCarPassed
+6, Vertical1Influx
+9, Vertical2Influx
+10, Vertical3Influx
+12, 0
+TotalCarPassed
+6, Vertical1Influx
+10, Vertical2Influx
+10, Vertical3Influx
+12, 0
+TotalCarPassed
+6, Vertical1Influx
+10, Vertical2Influx
+10, Vertical3Influx
+12, 0
+TotalCarPassed
+7, Vertical1Influx
+11, Vertical2Influx
+9, Vertical3Influx
+11, 0
+TotalCarPassed
+7, Vertical1Influx
+12, Vertical2Influx
+9, Vertical3Influx
+11, 0
+TotalCarPassed
+7, Vertical1Influx
+11, Vertical2Influx
+9, Vertical3Influx
+11, 0
+TotalCarPassed
+7, Vertical1Influx
+11, Vertical2Influx
+9, Vertical3Influx
+12, 0
+TotalCarPassed
+8, Vertical1Influx
+13, Vertical2Influx
+9, Vertical3Influx
+11, 0
+TotalCarPassed
+9, Vertical1Influx
+13, Vertical2Influx
+10, Vertical3Influx
+10, 0
+TotalCarPassed
+9, Vertical1Influx
+12, Vertical2Influx
+10, Vertical3Influx
+10, 0
+TotalCarPassed
+9, Vertical1Influx
+12, Vertical2Influx
+10, Vertical3Influx
+10, 0
+TotalCarPassed
+9, Vertical1Influx
+13, Vertical2Influx
+10, Vertical3Influx
+10, 0
+TotalCarPassed
+9, Vertical1Influx
+12, Vertical2Influx
+10, Vertical3Influx
+10, 0
+TotalCarPassed
+9, Vertical1Influx
+12, Vertical2Influx
+9, Vertical3Influx
+10, 0
+TotalCarPassed
+9, Vertical1Influx
+12, Vertical2Influx
+9, Vertical3Influx
+10, 0
+TotalCarPassed
+10, Vertical1Influx
+12, Vertical2Influx
+9, Vertical3Influx
+9, 0
+TotalCarPassed
+10, Vertical1Influx
+13, Vertical2Influx
+9, Vertical3Influx
+10, 0
+TotalCarPassed
+10, Vertical1Influx
+13, Vertical2Influx
+9, Vertical3Influx
+10, 0
+TotalCarPassed
+11, Vertical1Influx
+12, Vertical2Influx
+9, Vertical3Influx
+9, 0
+TotalCarPassed
+11, Vertical1Influx
+12, Vertical2Influx
+9, Vertical3Influx
+9, 0
+TotalCarPassed
+11, Vertical1Influx
+12, Vertical2Influx
+8, Vertical3Influx
+9, 0
+TotalCarPassed
+11, Vertical1Influx
+12, Vertical2Influx
+8, Vertical3Influx
+10, 0
+TotalCarPassed
+11, Vertical1Influx
+12, Vertical2Influx
+9, Vertical3Influx
+10, 0
+TotalCarPassed
+12, Vertical1Influx
+11, Vertical2Influx
+8, Vertical3Influx
+9, 0
+TotalCarPassed
+13, Vertical1Influx
+11, Vertical2Influx
+7, Vertical3Influx
+8, 0
+TotalCarPassed
+14, Vertical1Influx
+11, Vertical2Influx
+7, Vertical3Influx
+7, 0
+TotalCarPassed
+14, Vertical1Influx
+10, Vertical2Influx
+7, Vertical3Influx
+7, 0
+TotalCarPassed
+14, Vertical1Influx
+9, Vertical2Influx
+7, Vertical3Influx
+7, 0
+TotalCarPassed
+14, Vertical1Influx
+9, Vertical2Influx
+8, Vertical3Influx
+7, 0
+TotalCarPassed
+14, Vertical1Influx
+9, Vertical2Influx
+8, Vertical3Influx
+7, 0
+TotalCarPassed
+14, Vertical1Influx
+9, Vertical2Influx
+8, Vertical3Influx
+8, 0
+TotalCarPassed
+14, Vertical1Influx
+9, Vertical2Influx
+8, Vertical3Influx
+8, 0
+TotalCarPassed
+14, Vertical1Influx
+9, Vertical2Influx
+9, Vertical3Influx
+8, 0
+TotalCarPassed
+14, Vertical1Influx
+9, Vertical2Influx
+9, Vertical3Influx
+8, 0
+TotalCarPassed
+14, Vertical1Influx
+9, Vertical2Influx
+9, Vertical3Influx
+8, 0
+TotalCarPassed
+14, Vertical1Influx
+10, Vertical2Influx
+10, Vertical3Influx
+8, 0
+TotalCarPassed
+15, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+15, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+15, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+15, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+15, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+16, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+16, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+16, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+17, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+18, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+18, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+18, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+18, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+18, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+18, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+18, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+19, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+19, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+19, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+20, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+20, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+20, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+20, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+21, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+22, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+23, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+24, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+24, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+25, Vertical1Influx
+0, Vertical2Influx
+0, Vertical3Influx
+0, 0
+TotalCarPassed
+26, Vertical1Influx
+12, Vertical2Influx
+13, Vertical3Influx
+10, 0

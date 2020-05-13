@@ -59,12 +59,12 @@ public class Data extends Thread {
                     System.out.println("DATA Flag " + this.lock.flag + " running...");
 
                     FileWriter writer = new FileWriter("trafficData.csv", true); //append everytime we call data thread
-                    writer.write(getTotalPassedCars() + "\t");
-                    writer.write(getHorizontalInflux(0) + "\t");
-                    writer.write(getHorizontalOutflux(0) + "\t");
+                    writer.write(getTotalPassedCars() + ", ");
                     //influx and outflux for vertical
-                    writer.write(getVerticalInflux(0) + "\t");
-                    writer.write(getVerticalOutflux(0) + "\t");
+                    writer.write(getVerticalOutflux(0) + ", ");
+                    writer.write(getVerticalOutflux(1) + ", ");
+                    writer.write(getVerticalOutflux(2) + ", ");
+                    writer.write("0\n");
                     //average time for a car to pass the two segments (horizontal/vertical)
                     //thinking about how to achieve it now......
                     writer.close();
