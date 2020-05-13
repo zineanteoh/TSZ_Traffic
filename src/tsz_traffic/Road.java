@@ -8,9 +8,9 @@ public class Road {
     public Light light;
     public int outflux = 0, influx = 0;
     final double CHECK = 0.8;
-    final int DIRECTION;        // 0 = horizontal; 1 = vertical
-    static final int HORIZONTAL = 0;
-    static final int VERTICAL = 1;
+    final int DIRECTION;        // 0 = vertical; 0 = horizontal
+    static final int HORIZONTAL = 1;
+    static final int VERTICAL = 0;
     private boolean blocked;
     
     public Road(int roadLength, Light light, int direction) {

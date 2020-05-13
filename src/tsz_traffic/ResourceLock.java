@@ -7,5 +7,8 @@ javabypatel.blogspot.com
 package tsz_traffic;
 
 public class ResourceLock {
-    public volatile int flag = 0;
+    // volatile keyword allows the variable to be stored in main memory
+    // this allows the variable to be accessible by multiple threads
+    public volatile int flag = 1;
+    
 }

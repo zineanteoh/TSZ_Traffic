@@ -22,12 +22,13 @@ public class Crossroad {
 
     public final static double TIME_INCREMENT = 0.1; // Duration of each loop in seconds
     public final static int SLEEP_TIME = 100; // Duration of Thread.sleep() at the end of each loop in milliseconds
-    public Thread horizontalThread;
-    public Thread verticalThread;
+    public ArrayList<Thread> horizontalThreads;
+    public ArrayList<Thread> verticalThreads;
     public Thread dataThread;
+    public ResourceLock lock;
     public static double endTime;
     public double roadWidth;
-    static final ResourceLock lock = new ResourceLock();
+    public int crossroadCount = 0;
 
     public Crossroad(double endTime, double roadWidth) {
 
@@ -36,23 +37,44 @@ public class Crossroad {
 
         // Stores the width of each road, in feet
         this.roadWidth = roadWidth;
+
+        // Stores number of crossroads
+        this.crossroadCount = 0;
+
+        // ResourceLock for synchronizing threads
+        this.lock = new ResourceLock();
+        
+        // Thread arrays
+        this.horizontalThreads = new ArrayList<Thread>();
+        this.verticalThreads = new ArrayList<Thread>();
+        
     }
 
     public void addCrossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
         // Create three threads, one for horizontal direction, one for vertical, one for data
-        horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock, this.roadWidth);
-        verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock, this.roadWidth);
 
+        this.horizontalThreads.add(new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock, this.roadWidth, crossroadCount + 1));
+        this.verticalThreads.add(new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock, this.roadWidth, crossroadCount + 1));
+        
         // Link horizontal and vertical threads (by setting oppositeRoad to each other) 
-        ((RoadSimulation) horizontalThread).setOppositeRoad(((RoadSimulation) verticalThread));
-        ((RoadSimulation) verticalThread).setOppositeRoad(((RoadSimulation) horizontalThread));
+        ((RoadSimulation) horizontalThreads.get(this.crossroadCount)).setOppositeRoad(((RoadSimulation) verticalThreads.get(this.crossroadCount)));
+        ((RoadSimulation) verticalThreads.get(this.crossroadCount)).setOppositeRoad(((RoadSimulation) horizontalThreads.get(this.crossroadCount)));
+        
+        this.crossroadCount++;
     }
 
     public void runSimulation() throws InterruptedException {
-        dataThread = new Data(this.lock, horizontalThread, verticalThread);
+        // Create a data thread
+        this.dataThread = new Data(this.lock, this.horizontalThreads, this.verticalThreads, this.crossroadCount);
+
         // Start simulation. 
-        this.horizontalThread.start();
-        this.verticalThread.start();
+        for (int i = 0; i < this.crossroadCount; i++) {
+            this.horizontalThreads.get(i).start();
+        }
+        for (int i = 0; i < this.crossroadCount; i++) {
+            this.verticalThreads.get(i).start();
+        }
         this.dataThread.start();
     }
+    
 }
