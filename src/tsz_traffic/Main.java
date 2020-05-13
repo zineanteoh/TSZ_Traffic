@@ -20,14 +20,15 @@ public class Main {
         simulationTime = 10;
         
         
-        /* Simulating one of SanLiTun's crossroad: 
-                        ||
-                        || <- 370ft 
-                        ||
-            ===700ft===[  ]===850ft===
-                        ||
-                        || <- 520ft
-                        ||                  
+        /* Simulating crossroads at SanLiTun: 
+                        ||                           ||
+                        ||     <-----370ft----->     || 
+                        ||                           ||
+            ===700ft===[  ]===850ft=== | ===850ft===[  ]===700ft===
+                        ||                           ||
+                        ||     <-----520ft----->     ||
+                        ||                           ||
+            <--------CrossRoad1-------> <---------CrossRoad2-------->
         Clarification: Two RoadSegments make up a Road   */
         int[] horizontalRoad = {700, 850};    // left to right
         int[] verticalRoad = {370, 520};       // up to down
@@ -49,16 +50,18 @@ public class Main {
         verticalLight[1] = new Light(Light.RED, 4, 2);      // traffic light for end of bottom segment
         
         
-        // Create a crossroad
+        
+        // Create a crossroad object 
         Crossroad cr = new Crossroad(simulationTime, roadWidth);
         
-        // Add a crossroad
+        // Add crossroad 1
         cr.addCrossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight);
         
+        // Add crossroad 2
+        horizontalRoad = new int[]{850, 700};
+        cr.addCrossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight);
         
         // Simulate the crossroad
         cr.runSimulation();
-        
-        
     }
 }
