@@ -46,7 +46,7 @@ public class Crossroad {
         ResourceLock lock = new ResourceLock();
         horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock, this.roadWidth);
         verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock, this.roadWidth);
-        dataThread = new Data(lock);
+        dataThread = new Data(lock, horizontalThread, verticalThread);
         
         // Link horizontal and vertical threads (by setting oppositeRoad to each other) 
         ((RoadSimulation) horizontalThread).setOppositeRoad(((RoadSimulation)verticalThread));

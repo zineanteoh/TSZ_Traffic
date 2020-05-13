@@ -12,10 +12,14 @@ Tasks:
 package tsz_traffic;
 
 public class Data extends Thread {
-
+    
+    Thread horizontalThread;
+    Thread verticalThread;
     ResourceLock lock;
-    public Data(ResourceLock lock) {
+    public Data(ResourceLock lock, Thread horizontalThread, Thread verticalThread) {
         this.lock = lock;
+        this.horizontalThread = horizontalThread;
+        this.verticalThread = verticalThread;
         System.out.println("Creating Data Thread...");
     }
 
@@ -29,7 +33,7 @@ public class Data extends Thread {
                     
                     time = Math.round(time * 10) / 10.0; // Round time to 1 dp
                     System.out.println("Running Data Thread" + "\tTime: " + time);
-
+                    
                     // Retrieve data from the two road segments of horizontalThread
                     // TODO...
                     // REPEAT for verticalThread
