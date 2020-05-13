@@ -32,7 +32,7 @@ public class Main {
         Clarification: Two RoadSegments make up a Road   */
         int[] horizontalRoad = {700, 850};    // left to right
         int[] verticalRoad = {370, 520};       // up to down
-        double roadWidth = 20; // The middle [  ] is a 20x20 crossroad
+        double roadWidth = 20; // The middle [  ] is a 20ftx20ft crossroad
         
         
         /* Light data (Takes in 3 inputs)
@@ -50,15 +50,16 @@ public class Main {
         verticalLight[1] = new Light(Light.RED, 4, 2);      // traffic light for end of bottom segment
         
         
-        
-        // Create a crossroad object 
+        // Create an object that controls all the crossroads
         Crossroad cr = new Crossroad(simulationTime, roadWidth);
         
-        // Add crossroad 1
+        // Add crossroad #1
         cr.addCrossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight);
-        
-        // Add crossroad 2
+        // Add crossroad #2 (to the right of cr#1)
         horizontalRoad = new int[]{850, 700};
+        cr.addCrossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight);
+        // Add crossroad #3 (to the right of cr#2)
+        horizontalRoad = new int[]{700, 600};
         cr.addCrossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight);
         
         // Simulate the crossroad

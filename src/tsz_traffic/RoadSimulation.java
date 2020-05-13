@@ -9,10 +9,11 @@ public class RoadSimulation extends Thread {
     final int DIRECTION;
     public RoadSimulation oppositeRoad;
     public ArrayList<Road> roadArray;
-    ResourceLock lock;
+    public static ResourceLock lock;
     private double roadWidth;
+    public int crossroadID;
 
-    public RoadSimulation(int[] roadData, Light[] lightData, int direction, ResourceLock lock, double roadWidth) {
+    public RoadSimulation(int[] roadData, Light[] lightData, int direction, ResourceLock lock, double roadWidth, int crossroadID) {
         this.lock = lock;
         this.DIRECTION = direction;
         this.carCounter = 1;
@@ -20,20 +21,22 @@ public class RoadSimulation extends Thread {
         this.roadArray = populateRoadArray(this.roadArray, roadData, lightData, this.DIRECTION);        // Populate the road array based on road and light data
         this.oppositeRoad = null;
         this.roadWidth = roadWidth;
-        System.out.println("Creating Thread " + (this.DIRECTION + 1) + "...");
+        this.crossroadID = crossroadID;
+        System.out.println("Creating Thread... CR-ID: " + this.crossroadID + "; Direction: " + this.DIRECTION + "...");
     }
 
     public void run() {
         // Run simulation
         try {
-            synchronized (lock) {
+            synchronized (this.lock) {
                 for (double time = 0; time <= Main.simulationTime; time += Crossroad.TIME_INCREMENT) {
-                    while (lock.flag != this.DIRECTION) {
-                        lock.wait();
+                    while (this.lock.flag != this.crossroadID * 2 - this.DIRECTION) {
+                        this.lock.wait();
                     }
 
                     time = Math.round(time * 10) / 10.0; // round time to 1 dp
-                    System.out.println("Running Thread " + (DIRECTION + 1) + "\tTime: " + time);
+                    System.out.println("Flag " + this.lock.flag + " running");
+//                    System.out.println("Running Thread " + (DIRECTION + 1) + "\tTime: " + time);
 
                     // Loop through road segments and execute 3 actions
                     for (int roadIndex = 0; roadIndex < this.roadArray.size(); roadIndex++) {
@@ -49,9 +52,9 @@ public class RoadSimulation extends Thread {
 
                     // Continue adding cars into the last segment of this road direction to simulate a congestion
                     makeTrafficWorse(this.roadArray);
-
-                    lock.flag = this.DIRECTION + 1;
-                    lock.notifyAll(); // Wakes up all threads that are waiting on this object's monitor
+                    
+                    this.lock.flag++;
+                    this.lock.notifyAll(); // Wakes up all threads that are waiting on this object's monitor
                 }
 
             }

@@ -11,40 +11,49 @@ Tasks:
  */
 package tsz_traffic;
 
+import java.util.ArrayList;
+
 public class Data extends Thread {
     
-    Thread horizontalThread;
-    Thread verticalThread;
+    ArrayList<Thread> horizontalThreads;
+    ArrayList<Thread> verticalThreads;
     ResourceLock lock;
-    public Data(ResourceLock lock, Thread horizontalThread, Thread verticalThread) {
+    int crossroadCount;
+    public Data(ResourceLock lock, ArrayList<Thread> horizontalThreads, ArrayList<Thread> verticalThreads, int crossroadCount) {
         this.lock = lock;
-        this.horizontalThread = horizontalThread;
-        this.verticalThread = verticalThread;
+        this.horizontalThreads = horizontalThreads;
+        this.verticalThreads = verticalThreads;
         System.out.println("Creating Data Thread...");
+        this.crossroadCount = crossroadCount;
     }
 
     public void run() {
         try {
             synchronized (lock) {
                 for (double time = 0; time <= Main.simulationTime; time += Crossroad.TIME_INCREMENT) {
-                    while (lock.flag != 2) {
-                        lock.wait();
+                    while (this.lock.flag != this.crossroadCount * 2 + 1) {
+                        this.lock.wait();
                     }
                     
                     time = Math.round(time * 10) / 10.0; // Round time to 1 dp
-                    System.out.println("Running Data Thread" + "\tTime: " + time);
+                    System.out.println("DATA Flag " + this.lock.flag + " running...");
+//                    System.out.println("Running Data Thread" + "\tTime: " + time);
                     
-                    // Retrieve data from the two road segments of horizontalThread
+                    // Retrieve data from the two road segments of horizontalThreads
                     // TODO...
-                    // REPEAT for verticalThread
+                    // REPEAT for verticalThreads
                     // TODO...
                     
-                    lock.flag = 0;
-                    lock.notifyAll();
+                    this.lock.flag = 1;
+                    this.lock.notifyAll();
                 }
             }
         } catch (Exception e) {
             System.out.printf("Exception Thread Data: %s", e.getMessage());
         }
+    }
+    
+    public int getCount() {
+        return this.crossroadCount;
     }
 }

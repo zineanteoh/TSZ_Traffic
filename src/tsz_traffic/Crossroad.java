@@ -13,56 +13,70 @@
     [Zi] Trigger a congestion at the crossroad. And then test our solution
     
     *** Our solution is essentially making traffic lights smarter ***
-*/
-
+ */
 package tsz_traffic;
 
 import java.util.ArrayList;
 
 public class Crossroad {
-    
+
     public final static double TIME_INCREMENT = 0.1; // Duration of each loop in seconds
     public final static int SLEEP_TIME = 100; // Duration of Thread.sleep() at the end of each loop in milliseconds
-    public Thread horizontalThread;
-    public Thread verticalThread;
+    public ArrayList<Thread> horizontalThreads;
+    public ArrayList<Thread> verticalThreads;
     public Thread dataThread;
+    public ResourceLock lock;
     public static double endTime;
     public static ArrayList<Crossroad> crossroads;
     public double roadWidth;
-    
+    public int crossroadCount = 0;
+
     public Crossroad(double endTime, double roadWidth) {
         // Create an empty ArrayList of Crossroads
         this.crossroads = new ArrayList<Crossroad>();
-        
+
         // END_TIME stores how long simulation lasts in seconds
         this.endTime = endTime;
-        
+
         // Stores the width of each road, in feet
         this.roadWidth = roadWidth;
+
+        // Stores number of crossroads
+        this.crossroadCount = 0;
+
+        // ResourceLock for synchronizing threads
+        this.lock = new ResourceLock();
+        
+        // Thread arrays
+        this.horizontalThreads = new ArrayList<Thread>();
+        this.verticalThreads = new ArrayList<Thread>();
+        
     }
-    
-    public Crossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
+
+    public void addCrossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
         // Create three threads, one for horizontal direction, one for vertical, one for data
-        ResourceLock lock = new ResourceLock();
-        horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock, this.roadWidth);
-        verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock, this.roadWidth);
-        dataThread = new Data(lock, horizontalThread, verticalThread);
+        this.horizontalThreads.add(new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock, this.roadWidth, crossroadCount + 1));
+        this.verticalThreads.add(new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock, this.roadWidth, crossroadCount + 1));
         
         // Link horizontal and vertical threads (by setting oppositeRoad to each other) 
-        ((RoadSimulation) horizontalThread).setOppositeRoad(((RoadSimulation)verticalThread));
-        ((RoadSimulation) verticalThread).setOppositeRoad(((RoadSimulation)horizontalThread));
+        ((RoadSimulation) horizontalThreads.get(this.crossroadCount)).setOppositeRoad(((RoadSimulation) verticalThreads.get(this.crossroadCount)));
+        ((RoadSimulation) verticalThreads.get(this.crossroadCount)).setOppositeRoad(((RoadSimulation) horizontalThreads.get(this.crossroadCount)));
+        
+        this.crossroadCount++;
     }
-    
-    public void addCrossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
-        this.crossroads.add(new Crossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight));
-    }
-    
+
     public void runSimulation() throws InterruptedException {
+        // Create a data thread
+        this.dataThread = new Data(this.lock, this.horizontalThreads, this.verticalThreads, this.crossroadCount);
+
         // Start simulation. 
-        for (Crossroad cr : crossroads) {
-            cr.horizontalThread.start();
-            cr.verticalThread.start();
-            cr.dataThread.start();
+        for (int i = 0; i < this.crossroadCount; i++) {
+            this.horizontalThreads.get(i).start();
         }
+        for (int i = 0; i < this.crossroadCount; i++) {
+            this.verticalThreads.get(i).start();
+        }
+        this.dataThread.start();
     }
+    
 }
