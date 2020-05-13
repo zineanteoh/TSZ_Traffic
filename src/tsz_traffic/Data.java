@@ -41,6 +41,10 @@ public class Data extends Thread {
     public void run() {
         try {
             synchronized (lock) {
+                // Clear trafficData.csv file
+                FileWriter preWriter = new FileWriter("trafficData.csv", false);
+                preWriter.close();
+                
                 for (double time = 0; time <= Main.simulationTime; time += Crossroad.TIME_INCREMENT) {
                     while (lock.flag != 2) {
                         lock.wait();
@@ -48,21 +52,21 @@ public class Data extends Thread {
                     
                     time = Math.round(time * 10) / 10.0; // Round time to 1 dp
                     System.out.println("Running Data Thread" + "\tTime: " + time);
-                    
-                    //number of cars that have passed
-                    int totalPassedCars;
-                    totalPassedCars = ((RoadSimulation)this.horizontalThread).getFrontMostCar()-1 + ((RoadSimulation)this.verticalThread).getFrontMostCar()-1;
+//                    
+//                    //number of cars that have passed
+                    int totalPassedCars = 70;
+//                    totalPassedCars = ((RoadSimulation)this.horizontalThread).getFrontMostCar()-1 + ((RoadSimulation)this.verticalThread).getFrontMostCar()-1;
                     FileWriter writer = new FileWriter("trafficData.csv", true); //append everytime we call data thread
                     writer.write(totalPassedCars + "\t");
-
-                    //influx and outflux for horizontal
+                    
+//                    //influx and outflux for horizontal
                     writer.write(getHorizontalInflux() + "\t");
-                    writer.write(getHorizontalOutflux() + "\t");
-                    //influx and outflux for vertical
-                    writer.write(getVerticalInflux() + "\t");
-                    writer.write(getVerticalOutflux() + "\t");
-                    //average time for a car to pass the two segments (horizontal/vertical)
-                    //thinking about how to achieve it now......
+//                    writer.write(getHorizontalOutflux() + "\t");
+//                    //influx and outflux for vertical
+//                    writer.write(getVerticalInflux() + "\t");
+//                    writer.write(getVerticalOutflux() + "\t");
+//                    //average time for a car to pass the two segments (horizontal/vertical)
+//                    //thinking about how to achieve it now......
                     writer.close();
                     
                     lock.flag = 0;
@@ -70,23 +74,23 @@ public class Data extends Thread {
                 }
             }
         } catch (Exception e) {
-            System.out.printf("Exception Thread Data: %s", e.getMessage());
+            System.out.printf("Exception Thread Data: %s", e);
         }
     }
     
-    public int getHorizontalInflux(){//influx of segment with index 0 and outflux of segment with index 1 for the horizontal direction
+    public synchronized int getHorizontalInflux(){//influx of segment with index 0 and outflux of segment with index 1 for the horizontal direction
         return ((RoadSimulation)horizontalThread).roadArray.get(0).getInflux(((RoadSimulation)horizontalThread).roadArray, 0);
     }
     
-    public int getVerticalInflux(){//influx of segment with index 0 and outflux of segment with index 1 for the vertical direction
+    public synchronized int getVerticalInflux(){//influx of segment with index 0 and outflux of segment with index 1 for the vertical direction
         return ((RoadSimulation)verticalThread).roadArray.get(0).getInflux(((RoadSimulation)verticalThread).roadArray, 0);
     }
     
-    public int getHorizontalOutflux(){//outflux of segment with index 0 aka rate of exiting the segment in the horizontal direction
+    public synchronized int getHorizontalOutflux(){//outflux of segment with index 0 aka rate of exiting the segment in the horizontal direction
         return ((RoadSimulation)horizontalThread).roadArray.get(0).getOutflux();
     }
     
-    public int getVerticalOutflux(){//outflux of segment with index 0 aka rate of exiting the segment in the vertical direction
+    public synchronized int getVerticalOutflux(){//outflux of segment with index 0 aka rate of exiting the segment in the vertical direction
         return ((RoadSimulation)verticalThread).roadArray.get(0).getOutflux();
     }
 

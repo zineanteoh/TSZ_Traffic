@@ -13,56 +13,46 @@
     [Zi] Trigger a congestion at the crossroad. And then test our solution
     
     *** Our solution is essentially making traffic lights smarter ***
-*/
-
+ */
 package tsz_traffic;
 
 import java.util.ArrayList;
 
 public class Crossroad {
-    
+
     public final static double TIME_INCREMENT = 0.1; // Duration of each loop in seconds
     public final static int SLEEP_TIME = 100; // Duration of Thread.sleep() at the end of each loop in milliseconds
     public Thread horizontalThread;
     public Thread verticalThread;
     public Thread dataThread;
     public static double endTime;
-    public static ArrayList<Crossroad> crossroads;
     public double roadWidth;
-    
+    static final ResourceLock lock = new ResourceLock();
+
     public Crossroad(double endTime, double roadWidth) {
-        // Create an empty ArrayList of Crossroads
-        this.crossroads = new ArrayList<Crossroad>();
-        
+
         // END_TIME stores how long simulation lasts in seconds
         this.endTime = endTime;
-        
+
         // Stores the width of each road, in feet
         this.roadWidth = roadWidth;
     }
-    
-    public Crossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
+
+    public void addCrossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
         // Create three threads, one for horizontal direction, one for vertical, one for data
-        ResourceLock lock = new ResourceLock();
         horizontalThread = new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock, this.roadWidth);
         verticalThread = new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock, this.roadWidth);
-        dataThread = new Data(lock, horizontalThread, verticalThread);
-        
+
         // Link horizontal and vertical threads (by setting oppositeRoad to each other) 
-        ((RoadSimulation) horizontalThread).setOppositeRoad(((RoadSimulation)verticalThread));
-        ((RoadSimulation) verticalThread).setOppositeRoad(((RoadSimulation)horizontalThread));
+        ((RoadSimulation) horizontalThread).setOppositeRoad(((RoadSimulation) verticalThread));
+        ((RoadSimulation) verticalThread).setOppositeRoad(((RoadSimulation) horizontalThread));
     }
-    
-    public void addCrossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
-        this.crossroads.add(new Crossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight));
-    }
-    
+
     public void runSimulation() throws InterruptedException {
+        dataThread = new Data(this.lock, horizontalThread, verticalThread);
         // Start simulation. 
-        for (Crossroad cr : crossroads) {
-            cr.horizontalThread.start();
-            cr.verticalThread.start();
-            cr.dataThread.start();
-        }
+        this.horizontalThread.start();
+        this.verticalThread.start();
+        this.dataThread.start();
     }
 }

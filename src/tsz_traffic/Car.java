@@ -34,7 +34,7 @@ public class Car {
         this.frontCar = null;
     }
     
-    public void go(double increment, ArrayList<Car> cars, boolean blocked) { // increment is in seconds (e.g. 0.1 seconds)
+    public synchronized void go(double increment, ArrayList<Car> cars, boolean blocked) { // increment is in seconds (e.g. 0.1 seconds)
         if (this.equals(cars.get(0))) {
             // this car is at the front. CHECK for blockage caused by opposing lane
             if (blocked) {
@@ -54,7 +54,7 @@ public class Car {
         }
     }
     
-    public void closeIn(double increment, ArrayList<Car> cars, Road segment) { // this is called when traffic light is red
+    public synchronized void closeIn(double increment, ArrayList<Car> cars, Road segment) { // this is called when traffic light is red
         double frontObjectYCoordinate;
         if (this.equals(cars.get(0))) { // if this car is the first car in the segment...
             frontObjectYCoordinate = segment.ROAD_LENGTH; // front 'object' is simply the end of segment
@@ -72,7 +72,7 @@ public class Car {
         }
     }
     
-    public boolean noPossibleCollision() {
+    public synchronized boolean noPossibleCollision() {
         double thisCarAfter1S = this.y + this.LENGTH + this.speed;
         if (this.frontCar.y - thisCarAfter1S > 2) {
             return true;
@@ -81,19 +81,19 @@ public class Car {
         }
     }
     
-    public double getY() {
+    public synchronized double getY() {
         return this.y;
     }
     
-    public void resetY() {
+    public synchronized void resetY() {
         this.y = 0;
     }
     
-    public double getLength() {
+    public synchronized double getLength() {
         return this.LENGTH;
     }
     
-    public String getCarNumber() {
+    public synchronized String getCarNumber() {
         return Integer.toString(this.carNumber);
     }
 }
