@@ -194,7 +194,7 @@ public class RoadSimulation extends Thread {
         }
     }
 
-    public String getFrontMostCar() {
-        return this.roadArray.get(0).getFrontCar().getCarNumber();
+    public synchronized int getFrontMostCar() {
+        return Integer.parseInt(this.roadArray.get(0).getFrontCar().getCarNumber());
     }
 }

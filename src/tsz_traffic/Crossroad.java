@@ -27,13 +27,10 @@ public class Crossroad {
     public Thread dataThread;
     public ResourceLock lock;
     public static double endTime;
-    public static ArrayList<Crossroad> crossroads;
     public double roadWidth;
     public int crossroadCount = 0;
 
     public Crossroad(double endTime, double roadWidth) {
-        // Create an empty ArrayList of Crossroads
-        this.crossroads = new ArrayList<Crossroad>();
 
         // END_TIME stores how long simulation lasts in seconds
         this.endTime = endTime;
