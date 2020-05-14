@@ -17,7 +17,9 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         
         // Simulation duration, in seconds
-        simulationTime = 120;
+        simulationTime = 240;
+        // Implement Solution or not (false = status quo)
+        boolean implementSolution = true;
         
         
 
@@ -51,7 +53,7 @@ public class Main {
         verticalLight[1] = new Light(Light.RED, 15, 7);      // traffic light for end of bottom segment
         
         // Create an object that controls all the crossroads
-        Crossroad cr = new Crossroad(simulationTime, roadWidth);
+        Crossroad cr = new Crossroad(simulationTime, roadWidth, implementSolution);
         
         // Add crossroad #1
         cr.addCrossroad(horizontalRoad, horizontalLight, verticalRoad, verticalLight);

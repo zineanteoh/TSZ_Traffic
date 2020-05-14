@@ -29,13 +29,17 @@ public class Crossroad {
     public static double endTime;
     public double roadWidth;
     public int crossroadCount = 0;
+    public static boolean interrupt;
 
-    public Crossroad(double endTime, double roadWidth) {
+    public Crossroad(double endTime, double roadWidth, boolean interrupt) {
         // END_TIME stores how long simulation lasts in seconds
         this.endTime = endTime;
 
         // Stores the width of each road, in feet
         this.roadWidth = roadWidth;
+        
+        // Interrupt (true) or status quo (false)
+        this.interrupt = interrupt;
 
         // Stores number of crossroads
         this.crossroadCount = 0;

@@ -118,7 +118,7 @@ public class RoadSimulation extends Thread {
             }
 
             // Apply densityCheck() on the road segment behind roadArray[index]
-            if (roadArray.get(index - 1).densityCheck()) {
+            if (roadArray.get(index - 1).densityCheck() && Crossroad.interrupt) {
                 // All 3 conditions have been met. Proceed to interrupting light
                 roadArray.get(index).getLights().interrupt();
                 System.out.printf("Traffic Light of Thread %s (index %d) has been Interrupted!%n", (roadArray.get(index).DIRECTION + 1), index);
