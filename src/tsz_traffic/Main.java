@@ -22,14 +22,14 @@ public class Main {
         
 
         /* Simulating crossroads at SanLiTun: 
-                        ||                           ||
-                        ||     <-----370ft----->     || 
-                        ||                           ||
-            ===700ft===[  ]===850ft=== | ===850ft===[  ]===700ft===
-                        ||                           ||
-                        ||     <-----520ft----->     ||
-                        ||                           ||
-            <--------CrossRoad1-------> <---------CrossRoad2-------->
+                        ||                           ||                           ||
+                        ||     <-----370ft----->     ||     <-----520ft----->     ||
+                        ||                           ||                           ||
+            ===700ft===[  ]===850ft=== | ===850ft===[  ]===700ft=== | ===700ft===[  ]===600ft===
+                        ||                           ||                           ||
+                        ||     <-----520ft----->     ||     <-----520ft----->     ||
+                        ||                           ||                           ||  
+            <--------CrossRoad1-------> <---------CrossRoad2-------> <--------CrossRoad3-------->
         Clarification: Two RoadSegments make up a Road   */
         int[] horizontalRoad = {700, 850};    // left to right
         int[] verticalRoad = {370, 520};       // up to down
@@ -44,12 +44,11 @@ public class Main {
             3rd
                 Time left until state changes, in seconds    */
         Light[] horizontalLight = new Light[2];
-        horizontalLight[0] = new Light(Light.GREEN, 60, 0);   // traffic light for end of left segment 
-        horizontalLight[1] = new Light(Light.GREEN, 60, 30);   // traffic light for end of right segment
+        horizontalLight[0] = new Light(Light.GREEN, 15, 0);   // traffic light for end of left segment 
+        horizontalLight[1] = new Light(Light.GREEN, 15, 7);   // traffic light for end of right segment
         Light[] verticalLight = new Light[2];
-        verticalLight[0] = new Light(Light.RED, 60, 0);      // traffic light for end of top segment
-        verticalLight[1] = new Light(Light.RED, 60, 30);      // traffic light for end of bottom segment
-        
+        verticalLight[0] = new Light(Light.RED, 15, 0);      // traffic light for end of top segment
+        verticalLight[1] = new Light(Light.RED, 15, 7);      // traffic light for end of bottom segment
         
         // Create an object that controls all the crossroads
         Crossroad cr = new Crossroad(simulationTime, roadWidth);

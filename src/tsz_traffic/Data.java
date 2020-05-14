@@ -11,6 +11,7 @@ Tasks:
  */
 package tsz_traffic;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class Data extends Thread {
     ArrayList<Thread> verticalThreads;
     ResourceLock lock;
     int crossroadCount;
+    public String[] fileNames;
 
     public Data(ResourceLock lock, ArrayList<Thread> horizontalThreads, ArrayList<Thread> verticalThreads, int crossroadCount) {
         this.lock = lock;
@@ -29,15 +31,21 @@ public class Data extends Thread {
         this.verticalThreads = verticalThreads;
         System.out.println("Creating Data Thread...");
         this.crossroadCount = crossroadCount;
+        this.fileNames = new String[]{"horizontalPassed.dat", "horizontalOutflux.dat",
+            "verticalPassed1.dat", "verticalPassed2.dat", "verticalPassed3.dat",
+            "verticalOutflux1.dat", "verticalOutflux2.dat", "verticalOutflux3.dat"};
 
         // FileWriter
         try {
-            File myFile = new File("horizontalPassed.dat");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File " + myFile.getName() + " already exists.");
+            for (int i = 0; i < fileNames.length; i++) {
+                File myFile = new File(fileNames[i]);
+                if (myFile.createNewFile()) {
+                    System.out.println("File created: " + myFile.getName());
+                } else {
+                    System.out.println("File " + myFile.getName() + " already exists.");
+                }
             }
+
         } catch (IOException e) {
             System.out.println("An error has occured.");
         }
@@ -125,9 +133,12 @@ public class Data extends Thread {
     public void run() {
         try {
             synchronized (lock) {
-                // Clear file
-                FileWriter preWriter = new FileWriter("horizontalOutflux.dat", false);
-                preWriter.close();
+                // Clear all files
+                FileWriter writer = null;
+                for (int i = 0; i < this.fileNames.length; i++) {
+                    writer = new FileWriter(fileNames[i], false);
+                    writer.close();
+                }
 
                 for (double time = 0; time <= Main.simulationTime; time += Crossroad.TIME_INCREMENT) {
                     while (this.lock.flag != this.crossroadCount * 2 + 1) {
@@ -137,58 +148,33 @@ public class Data extends Thread {
                     time = Math.round(time * 10) / 10.0; // Round time to 1 dp
                     System.out.println("DATA Flag " + this.lock.flag + " running...");
 
-<<<<<<< Updated upstream
-                    FileWriter writer = new FileWriter("trafficData.csv", true); //append everytime we call data thread
-                    writer.write(getTotalPassedCars() + "\t");
-                    writer.write(getHorizontalInflux(0) + "\t");
-                    writer.write(getHorizontalOutflux(0) + "\t");
-                    //influx and outflux for vertical
-                    writer.write(getVerticalInflux(0) + "\t");
-                    writer.write(getVerticalOutflux(0) + "\t");
-                    //average time for a car to pass the two segments (horizontal/vertical)
-                    //thinking about how to achieve it now......
+                    // horizontalPassed.dat
+                    writer = new FileWriter(fileNames[0], true);
+                    writer.write(getHorizontalPassed() + " ");
+                    writer.write("\n");
                     writer.close();
-=======
-                    FileWriter writer1 = new FileWriter("horizontalPassed.dat", true); //append everytime we call data thread
-                    writer1.write(getHorizontalPassed() + " ");
-                    writer1.write("\n");
-                    writer1.close();
-                    
-                    FileWriter writer2 = new FileWriter("verticalPassed1.dat", true); //append everytime we call data thread
-                    writer2.write(getVerticalPassed(0) + " ");
-                    writer2.write("\n");
-                    writer2.close();
-                    
-                    FileWriter writer3 = new FileWriter("verticalPassed2.dat", true); //append everytime we call data thread
-                    writer3.write(getVerticalPassed(1) + " ");
-                    writer3.write("\n");
-                    writer3.close();
-                    
-                    FileWriter writer4 = new FileWriter("verticalPassed3.dat", true); //append everytime we call data thread
-                    writer4.write(getVerticalPassed(2) + " ");
-                    writer4.write("\n");
-                    writer4.close();
-                    
-                    FileWriter writer5 = new FileWriter("horizontalOutflux.dat", true); //append everytime we call data thread
-                    writer5.write(getHorizontalOutflux(0) + " ");
-                    writer5.write("\n");
-                    writer5.close();
-                    
-                    FileWriter writer6 = new FileWriter("verticalOutflux1.dat", true); //append everytime we call data thread
-                    writer6.write(getVerticalOutflux(0) + " ");
-                    writer6.write("\n");
-                    writer6.close();
-                    
-                    FileWriter writer7 = new FileWriter("verticalOutflux2.dat", true); //append everytime we call data thread
-                    writer7.write(getVerticalOutflux(1) + " ");
-                    writer7.write("\n");
-                    writer7.close();
-                    
-                    FileWriter writer8 = new FileWriter("verticalOutflux3.dat", true); //append everytime we call data thread
-                    writer8.write(getVerticalOutflux(2) + " ");
-                    writer8.write("\n");
-                    writer8.close();
->>>>>>> Stashed changes
+
+                    // horizontalOutflux.dat
+                    writer = new FileWriter(fileNames[1], true);
+                    writer.write(getHorizontalOutflux(this.crossroadCount - 1)+ " ");
+                    writer.write("\n");
+                    writer.close();
+
+                    // verticalPassed1, 2, 3.dat
+                    for (int i = 0; i < 3; i++) {
+                        writer = new FileWriter(fileNames[i + 2], true);
+                        writer.write(getVerticalPassed(i) + " ");
+                        writer.write("\n");
+                        writer.close();
+                    }
+
+                    // verticalOutflux1, 2, 3.dat
+                    for (int i = 0; i < 3; i++) {
+                        writer = new FileWriter(fileNames[i + 5], true);
+                        writer.write(getVerticalOutflux(i) + " ");
+                        writer.write("\n");
+                        writer.close();
+                    }
 
                     this.lock.flag = 1;
                     this.lock.notifyAll();
@@ -198,17 +184,22 @@ public class Data extends Thread {
             System.out.printf("Exception Thread Data: %s", e);
         }
     }
-    
+
     public synchronized int getHorizontalPassed() {
-        return ((RoadSimulation)this.horizontalThreads.get(this.crossroadCount-1)).getFrontMostCar()-1;
+        int total = 0;
+        for (int i = 0; i < this.crossroadCount; i++) {
+            total += ((RoadSimulation)this.horizontalThreads.get(i)).getTotalCarPassed();
+        }
+        return total;
     }
-    
+
     public synchronized int getVerticalPassed(int index) {
-        return ((RoadSimulation)this.verticalThreads.get(index)).getFrontMostCar()-1;
+        return ((RoadSimulation) this.verticalThreads.get(index)).getTotalCarPassed();
+
     }
 
     public synchronized int getHorizontalInflux(int index) {//influx of segment with index 0 and outflux of segment with index 1 for the horizontal direction
-        return ((RoadSimulation)this.horizontalThreads.get(index)).roadArray.get(0).getInflux(((RoadSimulation) this.horizontalThreads.get(index)).roadArray, 0);
+        return ((RoadSimulation) this.horizontalThreads.get(index)).roadArray.get(0).getInflux(((RoadSimulation) this.horizontalThreads.get(index)).roadArray, 0);
     }
 
     public synchronized int getVerticalInflux(int index) {//influx of segment with index 0 and outflux of segment with index 1 for the vertical direction
