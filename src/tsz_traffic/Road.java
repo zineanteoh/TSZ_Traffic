@@ -21,20 +21,20 @@ public class Road {
         this.blocked = false;
     }
     
-    public void goCars(double increment) {
+    public synchronized void goCars(double increment) {
         // but we need to take into account of the delay caused by reaction time and interaction between cars
         for (Car c : this.carArray) {
             c.go(increment, this.carArray, this.blocked);
         }
     }
 
-    public void closeInCars(double increment) {
+    public synchronized void closeInCars(double increment) {
         for (Car c : this.carArray) {
             c.closeIn(increment, this.carArray, this);
         }
     }
 
-    public boolean carExit() {
+    public synchronized boolean carExit() {
         if (this.carArray.size() == 0) {
             return false;
         }
@@ -46,32 +46,32 @@ public class Road {
         }
     }
 
-    public void updateLight(double time) {
+    public synchronized void updateLight(double time) {
         this.light.update(time);
     }
     
-    public boolean checkCondition(double time) {
+    public synchronized boolean checkCondition(double time) {
         time = Double.parseDouble(String.format("%.1f", time));
         return ((time - this.getLights().lastUpdatedTime) >= CHECK * this.getLights().updateTime);
     }
     
-    public void simpleUpdate(double time) { 
+    public synchronized void simpleUpdate(double time) { 
         this.light.update(time);
     }
 
-    public void populateCar(Car car) {
+    public synchronized void populateCar(Car car) {
         this.carArray.add(car);
     }
 
-    public void addCar(Car car) {
+    public synchronized void addCar(Car car) {
         this.carArray.add(car);
     }
 
-    public void removeCar(Car lastCar) {
+    public synchronized void removeCar(Car lastCar) {
         this.carArray.remove(lastCar);
     }
 
-    public int getOutflux() {
+    public synchronized int getOutflux() {
         this.outflux = 0; 
         if (this.getLights().isGreen()) {
             for (int i = 0; i < this.carArray.size(); i++) {
@@ -95,7 +95,7 @@ public class Road {
         return this.outflux;
     }
 
-    public int getInflux(ArrayList<Road> segments, int index) {
+    public synchronized int getInflux(ArrayList<Road> segments, int index) {
         if (index == segments.size() - 1) {
             return 100;
         }
@@ -103,7 +103,7 @@ public class Road {
         return this.influx;
     }
 
-    public boolean densityCheck() {
+    public synchronized boolean densityCheck() {
         if (this.carArray.size() > (this.ROAD_LENGTH / 19) && this.influx >= (this.outflux * 1.25)) {//25% larger because tiny spikes may exist
             return true;
         } else {
@@ -111,27 +111,27 @@ public class Road {
         }
     }
 
-    public Car getFrontCar() {
+    public synchronized Car getFrontCar() {
         return this.carArray.get(0);
     }
     
-    public Car getLastCar() {
+    public synchronized Car getLastCar() {
         return this.carArray.get(this.carArray.size() - 1);
     }
 
-    public int getLength() {
+    public synchronized int getLength() {
         return this.ROAD_LENGTH;
     }
 
-    public Light getLights() {
+    public synchronized Light getLights() {
         return this.light;
     }
 
-    public ArrayList<Car> getCarArray() {
+    public synchronized ArrayList<Car> getCarArray() {
         return this.carArray;
     }
     
-    public boolean isBlocked() {
+    public synchronized boolean isBlocked() {
         return this.blocked;
     }
     

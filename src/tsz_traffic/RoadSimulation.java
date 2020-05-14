@@ -8,20 +8,24 @@ public class RoadSimulation extends Thread {
     public int carCounter;
     final int DIRECTION;
     public RoadSimulation oppositeRoad;
+    public RoadSimulation rightRoad;
     public ArrayList<Road> roadArray;
     public static ResourceLock lock;
     private double roadWidth;
     public int crossroadID;
+    public int totalCarPassed;
 
     public RoadSimulation(int[] roadData, Light[] lightData, int direction, ResourceLock lock, double roadWidth, int crossroadID) {
         this.lock = lock;
         this.DIRECTION = direction;
         this.carCounter = 1;
-        this.roadArray = new ArrayList<>();                                                             // Create a road array
+        this.roadArray = new ArrayList<Road>();                                                             // Create a road array
         this.roadArray = populateRoadArray(this.roadArray, roadData, lightData, this.DIRECTION);        // Populate the road array based on road and light data
         this.oppositeRoad = null;
+        this.rightRoad = null;
         this.roadWidth = roadWidth;
         this.crossroadID = crossroadID;
+        this.totalCarPassed = 0;
         System.out.println("Creating Thread... CR-ID: " + this.crossroadID + "; Direction: " + this.DIRECTION + "...");
     }
 
@@ -36,7 +40,6 @@ public class RoadSimulation extends Thread {
 
                     time = Math.round(time * 10) / 10.0; // round time to 1 dp
                     System.out.println("Flag " + this.lock.flag + " running");
-//                    System.out.println("Running Thread " + (DIRECTION + 1) + "\tTime: " + time);
 
                     // Loop through road segments and execute 3 actions
                     for (int roadIndex = 0; roadIndex < this.roadArray.size(); roadIndex++) {
@@ -47,45 +50,31 @@ public class RoadSimulation extends Thread {
                         updateCarOfRoad(roadIndex, this.roadArray);
 
                         // Update RoadArrays now that cars have moved
-                        updateRoadArray(roadIndex, this.roadArray);
+                        updateRoadArray(roadIndex, this.roadArray, this.rightRoad);
                     }
 
                     // Continue adding cars into the last segment of this road direction to simulate a congestion
-                    makeTrafficWorse(this.roadArray);
-                    
+                    // ONLY Applies to FIRST crossroad OR Vertical lane!
+                    if (this.DIRECTION == Road.VERTICAL || this.crossroadID == 1) {
+                        makeTrafficWorse(this.roadArray);
+                    }
                     this.lock.flag++;
                     this.lock.notifyAll(); // Wakes up all threads that are waiting on this object's monitor
                 }
-
             }
         } catch (Exception e) {
-            System.out.printf("Exception Thread %d: %s%n", (this.DIRECTION + 1), e.getMessage());
+            System.out.printf("Exception Thread %d: %s%n", this.lock.flag, e);
         }
     }
 
-    public void printRoad(ArrayList<Road> roadArray, double time) {
-        String output = "";
-        String tempString = "";
-        String inOutFluxString = "";
-        for (int roadIndex = 0; roadIndex < roadArray.size(); roadIndex++) {
-            // print traffic light state first
-            output = roadArray.get(roadIndex).getLights().printState() + output;
-            // print only front to end car of this road segment
-            tempString = roadArray.get(roadIndex).carArray.get(0).getCarNumber();
-            tempString = roadArray.get(roadIndex).carArray.get(roadArray.get(roadIndex).carArray.size() - 1).getCarNumber() + "_..._" + tempString;
-
-            output = String.format("%50s", tempString) + output;
-            inOutFluxString = "\t\t\t\t" + String.format("%20s", ("In/Out: " + roadArray.get(roadIndex).getInflux(roadArray, roadIndex) + "/" + roadArray.get(roadIndex).getOutflux())) + inOutFluxString;
-        }
-        System.out.println("");
-        System.out.println("Time: " + Double.parseDouble(String.format("%.1f", time)));
-        System.out.println(output);
-        System.out.println(inOutFluxString);
-        System.out.println("");
-    }
-
-    public void setOppositeRoad(RoadSimulation road) {
+    // For linking road segments within a crossroad
+    public synchronized void setOppositeRoad(RoadSimulation road) {
         this.oppositeRoad = road;
+    }
+
+    // For linking crossroads
+    public synchronized void setRightRoad(RoadSimulation road) {
+        this.rightRoad = road;
     }
 
     private synchronized ArrayList<Road> populateRoadArray(ArrayList<Road> roadArray, int[] roadData, Light[] lightData, int direction) {
@@ -111,7 +100,6 @@ public class RoadSimulation extends Thread {
             Car tempCar = new Car(this.carCounter++, coordinate);
             roadSegment.populateCar(tempCar);
         }
-
         return roadSegment;
     }
 
@@ -163,12 +151,12 @@ public class RoadSimulation extends Thread {
                 this.oppositeRoad.roadArray.get(1).setBlocked(false);
             }
         }
-
     }
 
-    private synchronized void updateRoadArray(int index, ArrayList<Road> roadArray) {
+    private synchronized void updateRoadArray(int index, ArrayList<Road> roadArray, RoadSimulation rr) {
         // Check to see if any cars have 'exited' this road segment (its relative coordinate exceeded the road length)
         if (roadArray.get(index).carExit()) {
+            this.totalCarPassed++;
             // Get the front most car from this road segment
             Car frontCar = roadArray.get(index).getFrontCar();
             // Remove this car object from this road segment
@@ -178,6 +166,12 @@ public class RoadSimulation extends Thread {
                 // Set this car's y coordinate to 0
                 frontCar.resetY();
                 roadArray.get(index - 1).addCar(frontCar);
+            } else {
+                if (this.DIRECTION == Road.HORIZONTAL && rr != null) {
+                    // Add to the left horizontal segment of the next crossroad
+                    frontCar.resetY();
+                    rr.roadArray.get(0).addCar(frontCar);
+                }
             }
         }
     }
@@ -194,7 +188,8 @@ public class RoadSimulation extends Thread {
         }
     }
 
-    public synchronized int getFrontMostCar() {
-        return Integer.parseInt(this.roadArray.get(0).getFrontCar().getCarNumber());
+    public synchronized int getTotalCarPassed() {
+        return this.totalCarPassed;
     }
+
 }

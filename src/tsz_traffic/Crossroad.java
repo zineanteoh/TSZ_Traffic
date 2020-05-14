@@ -31,7 +31,6 @@ public class Crossroad {
     public int crossroadCount = 0;
 
     public Crossroad(double endTime, double roadWidth) {
-
         // END_TIME stores how long simulation lasts in seconds
         this.endTime = endTime;
 
@@ -43,26 +42,31 @@ public class Crossroad {
 
         // ResourceLock for synchronizing threads
         this.lock = new ResourceLock();
-        
+
         // Thread arrays
         this.horizontalThreads = new ArrayList<Thread>();
         this.verticalThreads = new ArrayList<Thread>();
-        
+
     }
 
     public void addCrossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {
         // Create three threads, one for horizontal direction, one for vertical, one for data
         this.horizontalThreads.add(new RoadSimulation(horizontalRoad, horizontalLight, Road.HORIZONTAL, lock, this.roadWidth, crossroadCount + 1));
         this.verticalThreads.add(new RoadSimulation(verticalRoad, verticalLight, Road.VERTICAL, lock, this.roadWidth, crossroadCount + 1));
-        
+
         // Link horizontal and vertical threads (by setting oppositeRoad to each other) 
-        ((RoadSimulation) horizontalThreads.get(this.crossroadCount)).setOppositeRoad(((RoadSimulation) verticalThreads.get(this.crossroadCount)));
-        ((RoadSimulation) verticalThreads.get(this.crossroadCount)).setOppositeRoad(((RoadSimulation) horizontalThreads.get(this.crossroadCount)));
-        
+        ((RoadSimulation) this.horizontalThreads.get(this.crossroadCount)).setOppositeRoad(((RoadSimulation) verticalThreads.get(this.crossroadCount)));
+        ((RoadSimulation) this.verticalThreads.get(this.crossroadCount)).setOppositeRoad(((RoadSimulation) horizontalThreads.get(this.crossroadCount)));
+
         this.crossroadCount++;
     }
 
     public void runSimulation() throws InterruptedException {
+        // Link the horizontal crossroads
+        for (int i = 0; i < this.crossroadCount - 1; i++) {
+            ((RoadSimulation) this.horizontalThreads.get(i)).setRightRoad((RoadSimulation) this.horizontalThreads.get(i + 1));
+        }
+
         // Create a data thread
         this.dataThread = new Data(this.lock, this.horizontalThreads, this.verticalThreads, this.crossroadCount);
 
@@ -75,5 +79,5 @@ public class Crossroad {
         }
         this.dataThread.start();
     }
-    
+
 }

@@ -11,6 +11,7 @@ Tasks:
  */
 package tsz_traffic;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class Data extends Thread {
     ArrayList<Thread> verticalThreads;
     ResourceLock lock;
     int crossroadCount;
+    public String[] fileNames;
 
     public Data(ResourceLock lock, ArrayList<Thread> horizontalThreads, ArrayList<Thread> verticalThreads, int crossroadCount) {
         this.lock = lock;
@@ -29,15 +31,21 @@ public class Data extends Thread {
         this.verticalThreads = verticalThreads;
         System.out.println("Creating Data Thread...");
         this.crossroadCount = crossroadCount;
+        this.fileNames = new String[]{"horizontalPassed.dat", "horizontalOutflux.dat",
+            "verticalPassed1.dat", "verticalPassed2.dat", "verticalPassed3.dat",
+            "verticalOutflux1.dat", "verticalOutflux2.dat", "verticalOutflux3.dat"};
 
         // FileWriter
         try {
-            File myFile = new File("trafficData.csv");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File " + myFile.getName() + " already exists.");
+            for (int i = 0; i < fileNames.length; i++) {
+                File myFile = new File(fileNames[i]);
+                if (myFile.createNewFile()) {
+                    System.out.println("File created: " + myFile.getName());
+                } else {
+                    System.out.println("File " + myFile.getName() + " already exists.");
+                }
             }
+
         } catch (IOException e) {
             System.out.println("An error has occured.");
         }
@@ -46,9 +54,12 @@ public class Data extends Thread {
     public void run() {
         try {
             synchronized (lock) {
-                // Clear trafficData.csv file
-                FileWriter preWriter = new FileWriter("trafficData.csv", false);
-                preWriter.close();
+                // Clear all files
+                FileWriter writer = null;
+                for (int i = 0; i < this.fileNames.length; i++) {
+                    writer = new FileWriter(fileNames[i], false);
+                    writer.close();
+                }
 
                 for (double time = 0; time <= Main.simulationTime; time += Crossroad.TIME_INCREMENT) {
                     while (this.lock.flag != this.crossroadCount * 2 + 1) {
@@ -58,16 +69,33 @@ public class Data extends Thread {
                     time = Math.round(time * 10) / 10.0; // Round time to 1 dp
                     System.out.println("DATA Flag " + this.lock.flag + " running...");
 
-                    FileWriter writer = new FileWriter("trafficData.csv", true); //append everytime we call data thread
-                    writer.write(getTotalPassedCars() + ", ");
-                    //influx and outflux for vertical
-                    writer.write(getVerticalOutflux(0) + ", ");
-                    writer.write(getVerticalOutflux(1) + ", ");
-                    writer.write(getVerticalOutflux(2) + ", ");
-                    writer.write("0\n");
-                    //average time for a car to pass the two segments (horizontal/vertical)
-                    //thinking about how to achieve it now......
+                    // horizontalPassed.dat
+                    writer = new FileWriter(fileNames[0], true);
+                    writer.write(getHorizontalPassed() + " ");
+                    writer.write("\n");
                     writer.close();
+
+                    // horizontalOutflux.dat
+                    writer = new FileWriter(fileNames[1], true);
+                    writer.write(getHorizontalOutflux(this.crossroadCount - 1)+ " ");
+                    writer.write("\n");
+                    writer.close();
+
+                    // verticalPassed1, 2, 3.dat
+                    for (int i = 0; i < 3; i++) {
+                        writer = new FileWriter(fileNames[i + 2], true);
+                        writer.write(getVerticalPassed(i) + " ");
+                        writer.write("\n");
+                        writer.close();
+                    }
+
+                    // verticalOutflux1, 2, 3.dat
+                    for (int i = 0; i < 3; i++) {
+                        writer = new FileWriter(fileNames[i + 5], true);
+                        writer.write(getVerticalOutflux(i) + " ");
+                        writer.write("\n");
+                        writer.close();
+                    }
 
                     this.lock.flag = 1;
                     this.lock.notifyAll();
@@ -77,13 +105,21 @@ public class Data extends Thread {
             System.out.printf("Exception Thread Data: %s", e.getMessage());
         }
     }
-    
-    public synchronized int getTotalPassedCars() {
-        return ((RoadSimulation)this.horizontalThreads.get(this.crossroadCount-1)).getFrontMostCar()-1 + ((RoadSimulation)this.verticalThreads.get(this.crossroadCount-1)).getFrontMostCar()-1;
+
+    public synchronized int getHorizontalPassed() {
+        int total = 0;
+        for (int i = 0; i < this.crossroadCount; i++) {
+            total += ((RoadSimulation)this.horizontalThreads.get(i)).getTotalCarPassed();
+        }
+        return total;
+    }
+
+    public synchronized int getVerticalPassed(int index) {
+        return ((RoadSimulation) this.verticalThreads.get(index)).getTotalCarPassed();
     }
 
     public synchronized int getHorizontalInflux(int index) {//influx of segment with index 0 and outflux of segment with index 1 for the horizontal direction
-        return ((RoadSimulation)this.horizontalThreads.get(index)).roadArray.get(0).getInflux(((RoadSimulation) this.horizontalThreads.get(index)).roadArray, 0);
+        return ((RoadSimulation) this.horizontalThreads.get(index)).roadArray.get(0).getInflux(((RoadSimulation) this.horizontalThreads.get(index)).roadArray, 0);
     }
 
     public synchronized int getVerticalInflux(int index) {//influx of segment with index 0 and outflux of segment with index 1 for the vertical direction

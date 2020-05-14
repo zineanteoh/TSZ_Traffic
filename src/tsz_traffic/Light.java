@@ -20,7 +20,7 @@ public class Light {
         this.interrupted = false;
     }
     
-    public void update(double time) { // status quo function
+    public synchronized void update(double time) { // status quo function
         time = Double.parseDouble(String.format("%.1f", time)); // Can be removed since time is rounded to 1dp at the beginning of each loop
         if ((time - this.lastUpdatedTime) % this.updateTime == 0) {
             if (this.interrupted) {
@@ -31,7 +31,7 @@ public class Light {
         }
     }
 
-    public void changeState(double time) {
+    public synchronized void changeState(double time) {
         if (this.state.equals(STATE[0])) {
             this.state = STATE[1];
         } else {
@@ -40,16 +40,16 @@ public class Light {
         this.lastUpdatedTime = time;
     }
     
-    public void interrupt() {
+    public synchronized void interrupt() {
         this.state = STATE[0];
         this.interrupted = true;
     }
     
-    public boolean isGreen() {
+    public synchronized boolean isGreen() {
         return this.state.equals("green");
     }
 
-    public String printState() {
+    public synchronized String printState() {
         if (this.isGreen()) {
             return ANSI_GREEN + this.state.substring(0, 1).toUpperCase() + ANSI_RESET;
         } else {
