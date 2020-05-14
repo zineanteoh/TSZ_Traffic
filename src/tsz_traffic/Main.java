@@ -21,14 +21,14 @@ public class Main {
         
         
         /* Simulating crossroads at SanLiTun: 
-                        ||                           ||
-                        ||     <-----370ft----->     || 
-                        ||                           ||
-            ===700ft===[  ]===850ft=== | ===850ft===[  ]===700ft===
-                        ||                           ||
-                        ||     <-----520ft----->     ||
-                        ||                           ||
-            <--------CrossRoad1-------> <---------CrossRoad2-------->
+                        ||                           ||                           ||
+                        ||     <-----370ft----->     ||     <-----520ft----->     ||
+                        ||                           ||                           ||
+            ===700ft===[  ]===850ft=== | ===850ft===[  ]===700ft=== | ===700ft===[  ]===600ft===
+                        ||                           ||                           ||
+                        ||     <-----520ft----->     ||     <-----520ft----->     ||
+                        ||                           ||                           ||  
+            <--------CrossRoad1-------> <---------CrossRoad2-------> <--------CrossRoad3-------->
         Clarification: Two RoadSegments make up a Road   */
         int[] horizontalRoad = {700, 850};    // left to right
         int[] verticalRoad = {370, 520};       // up to down
