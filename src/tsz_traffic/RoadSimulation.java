@@ -62,8 +62,10 @@ public class RoadSimulation extends Thread {
                     this.lock.notifyAll(); // Wakes up all threads that are waiting on this object's monitor
                 }
             }
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             System.out.printf("Exception Thread %d: %s%n", this.lock.flag, e);
+        } catch (InterruptedException e) {
+            System.out.printf("Interrupted Exception at Thread %d: %s%n", this.lock.flag, e);
         }
     }
 
@@ -121,10 +123,10 @@ public class RoadSimulation extends Thread {
             if (roadArray.get(index - 1).densityCheck() && Crossroad.interrupt) {
                 // All 3 conditions have been met. Proceed to interrupting light
                 roadArray.get(index).getLights().interrupt();
-                System.out.printf("Traffic Light of Thread %s (index %d) has been Interrupted!%n", (roadArray.get(index).DIRECTION + 1), index);
+                System.out.printf("Traffic Light of Thread %s (road index %d, direction %d) has been Interrupted!%n", (this.lock.flag), index, this.DIRECTION);
                 return;
             }
-
+            
             // DensityCheck() returns false. Call simple update time instead
             roadArray.get(index).simpleUpdate(time);
         }
@@ -140,7 +142,7 @@ public class RoadSimulation extends Thread {
         }
 
         // Check the front road (index 0) for blocked crossroad
-        if (index == 0) {
+        if (index == 0 && !roadArray.get(index).carArray.isEmpty()) {
             // Check the y coordinate of the last car
             double lastCarY = roadArray.get(index).getLastCar().getY();
             if (lastCarY <= this.roadWidth) {

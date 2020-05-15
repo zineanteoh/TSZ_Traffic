@@ -17,10 +17,9 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         
         // Simulation duration, in seconds
-        simulationTime = 145;
+        simulationTime = 500;
         // Implement Solution or not (false = status quo)
-        boolean implementSolution = true;
-        
+        boolean implementSolution = false;
         
 
         /* Simulating crossroads at SanLiTun: 
@@ -46,11 +45,11 @@ public class Main {
             3rd
                 Time left until state changes, in seconds    */
         Light[] horizontalLight = new Light[2];
-        horizontalLight[0] = new Light(Light.GREEN, 15, 0);   // traffic light for end of left segment 
-        horizontalLight[1] = new Light(Light.GREEN, 15, 7);   // traffic light for end of right segment
+        horizontalLight[0] = new Light(Light.GREEN, 30, 0);   // traffic light for end of left segment 
+        horizontalLight[1] = new Light(Light.GREEN, 30, 15);   // traffic light for end of right segment
         Light[] verticalLight = new Light[2];
-        verticalLight[0] = new Light(Light.RED, 15, 0);      // traffic light for end of top segment
-        verticalLight[1] = new Light(Light.RED, 15, 7);      // traffic light for end of bottom segment
+        verticalLight[0] = new Light(Light.GREEN, 30, 0);      // traffic light for end of top segment
+        verticalLight[1] = new Light(Light.GREEN, 30, 15);      // traffic light for end of bottom segment
         
         // Create an object that controls all the crossroads
         Crossroad cr = new Crossroad(simulationTime, roadWidth, implementSolution);

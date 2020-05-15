@@ -11,7 +11,6 @@ Tasks:
  */
 package tsz_traffic;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

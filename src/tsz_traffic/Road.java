@@ -7,7 +7,7 @@ public class Road {
     final int ROAD_LENGTH;
     public Light light;
     public int outflux = 0, influx = 0;
-    final double CHECK = 0.8;
+    final double CHECK = 0.93;
     final int DIRECTION;        // 0 = vertical; 0 = horizontal
     static final int HORIZONTAL = 1;
     static final int VERTICAL = 0;
@@ -35,7 +35,7 @@ public class Road {
     }
 
     public synchronized boolean carExit() {
-        if (this.carArray.size() == 0) {
+        if (this.carArray.isEmpty()) {
             return false;
         }
         Car frontMostCar = this.carArray.get(0);
@@ -116,7 +116,12 @@ public class Road {
     }
     
     public synchronized Car getLastCar() {
-        return this.carArray.get(this.carArray.size() - 1);
+        if (this.carArray.size() > 0) {
+            return this.carArray.get(this.carArray.size() - 1);
+        } else {
+            System.out.println("ERROR");
+            return null;
+        }
     }
 
     public synchronized int getLength() {
