@@ -39,7 +39,7 @@ public class RoadSimulation extends Thread {
                     }
 
                     time = Math.round(time * 10) / 10.0; // round time to 1 dp
-                    System.out.println("Flag " + this.lock.flag + " running");
+//                    System.out.println("Flag " + this.lock.flag + " running");
 
                     // Loop through road segments and execute 3 actions
                     for (int roadIndex = 0; roadIndex < this.roadArray.size(); roadIndex++) {

@@ -50,83 +50,6 @@ public class Data extends Thread {
             System.out.println("An error has occured.");
         }
         
-        try {
-            File myFile = new File("verticalPassed1.dat");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File " + myFile.getName() + " already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error has occured.");
-        }
-        
-        try {
-            File myFile = new File("verticalPassed2.dat");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File " + myFile.getName() + " already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error has occured.");
-        }
-        
-        try {
-            File myFile = new File("verticalPassed3.dat");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File " + myFile.getName() + " already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error has occured.");
-        }
-        
-        try {
-            File myFile = new File("horizontalOutflux.dat");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File " + myFile.getName() + " already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error has occured.");
-        }
-        
-        try {
-            File myFile = new File("verticalOutflux1.dat");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File " + myFile.getName() + " already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error has occured.");
-        }
-        
-        try {
-            File myFile = new File("verticalOutflux2.dat");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File " + myFile.getName() + " already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error has occured.");
-        }
-        
-        try {
-            File myFile = new File("verticalOutflux3.dat");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                System.out.println("File " + myFile.getName() + " already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error has occured.");
-        }
-        
     }
     
 
@@ -146,7 +69,7 @@ public class Data extends Thread {
                     }
 
                     time = Math.round(time * 10) / 10.0; // Round time to 1 dp
-                    System.out.println("DATA Flag " + this.lock.flag + " running...");
+//                    System.out.println("DATA Flag " + this.lock.flag + " running...");
 
                     // horizontalPassed.dat
                     writer = new FileWriter(fileNames[0], true);

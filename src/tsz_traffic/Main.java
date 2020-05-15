@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         
         // Simulation duration, in seconds
-        simulationTime = 240;
+        simulationTime = 145;
         // Implement Solution or not (false = status quo)
         boolean implementSolution = true;
         
