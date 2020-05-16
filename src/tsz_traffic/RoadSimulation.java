@@ -145,7 +145,7 @@ public class RoadSimulation extends Thread {
         if (index == 0 && !roadArray.get(index).carArray.isEmpty()) {
             // Check the y coordinate of the last car
             double lastCarY = roadArray.get(index).getLastCar().getY();
-            if (lastCarY <= this.roadWidth) {
+            if (lastCarY <= this.roadWidth * Main.width) {
                 // opposing lane is blocked
                 this.oppositeRoad.roadArray.get(1).setBlocked(true);
             } else {

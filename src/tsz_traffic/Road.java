@@ -7,7 +7,6 @@ public class Road {
     final int ROAD_LENGTH;
     public Light light;
     public int outflux = 0, influx = 0;
-    final double CHECK = 0.93;
     final int DIRECTION;        // 0 = vertical; 0 = horizontal
     static final int HORIZONTAL = 1;
     static final int VERTICAL = 0;
@@ -52,7 +51,7 @@ public class Road {
     
     public synchronized boolean checkCondition(double time) {
         time = Double.parseDouble(String.format("%.1f", time));
-        return ((time - this.getLights().lastUpdatedTime) >= CHECK * this.getLights().updateTime);
+        return ((time - this.getLights().lastUpdatedTime) >= Main.checkTime * this.getLights().updateTime);
     }
     
     public synchronized void simpleUpdate(double time) { 

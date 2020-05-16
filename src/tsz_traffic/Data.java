@@ -101,6 +101,8 @@ public class Data extends Thread {
                     this.lock.flag = 1;
                     this.lock.notifyAll();
                 }
+                this.lock.flag = -1;
+                this.lock.notifyAll();
             }
         } catch (Exception e) {
             System.out.printf("Exception Thread Data: %s", e);

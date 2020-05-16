@@ -36,7 +36,7 @@ public class Car {
     
     public synchronized void go(double increment, ArrayList<Car> cars, boolean blocked) { // increment is in seconds (e.g. 0.1 seconds)
         if (this.equals(cars.get(0))) {
-            // this car is at the front. CHECK for blockage caused by opposing lane
+            // this car is at the front. checkTime for blockage caused by opposing lane
             if (blocked) {
                 // if blocked, decelerate
                 

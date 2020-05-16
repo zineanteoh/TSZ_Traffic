@@ -25,7 +25,7 @@ public class Crossroad {
     public ArrayList<Thread> horizontalThreads;
     public ArrayList<Thread> verticalThreads;
     public Thread dataThread;
-    public ResourceLock lock;
+    public static ResourceLock lock;
     public static double endTime;
     public double roadWidth;
     public int crossroadCount = 0;
