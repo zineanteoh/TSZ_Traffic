@@ -75,16 +75,16 @@ public class Road {
         if (this.getLights().isGreen()) {
             for (int i = 0; i < this.carArray.size(); i++) {
                 if (i == 0) {
-                    if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).topSpeed) < 5) {
+                    if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).currentSpeed) < 5) {
                         this.outflux++;
                     }
                 } else {
-                    if (this.carArray.get(i).topSpeed > this.carArray.get(i - 1).topSpeed) {
-                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i - 1).topSpeed) < 5) {
+                    if (this.carArray.get(i).topSpeed > this.carArray.get(i - 1).currentSpeed) {
+                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i - 1).currentSpeed) < 5) {
                             this.outflux++;
                         }
                     } else {
-                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).topSpeed) < 5) {
+                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).currentSpeed) < 5) {
                             this.outflux++;
                         }
                     }

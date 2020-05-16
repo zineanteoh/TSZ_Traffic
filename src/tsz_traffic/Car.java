@@ -42,17 +42,13 @@ public class Car {
         if (this.equals(cars.get(0))) {
             // this car is at the front. checkTime for blockage caused by opposing lane
             if (blocked) {
-                if (this.y + this.LENGTH + this.currentSpeed * increment < segment.ROAD_LENGTH) {
-                    this.decelerate(increment);
-                } else {
-                    this.y += this.currentSpeed * increment;
-                }
+                this.decelerate(increment);
             } else {
                 this.accelerate(increment);
             }
         } else {
             if (this.frontCar != null && this.frontCar.y < this.y) {
-                
+
             }
             // this car has a car in front... let's check for possible collision
             this.frontCar = cars.get(cars.indexOf(this) - 1);
@@ -67,7 +63,7 @@ public class Car {
     }
 
     public synchronized void closeIn(double increment, ArrayList<Car> cars, Road segment) { // this is called when traffic light is red
-        
+
         double frontObjectYCoordinate;
         if (this.equals(cars.get(0))) { // if this car is the first car in the segment...
             frontObjectYCoordinate = segment.ROAD_LENGTH; // front 'object' is simply the end of segment
@@ -84,7 +80,7 @@ public class Car {
             this.decelerate(increment);
         }
     }
-    
+
     public synchronized void accelerate(double increment) {
         if (this.currentSpeed + this.accelerator < this.topSpeed) {
             // speeeeed
@@ -112,6 +108,8 @@ public class Car {
             // either collision might take place or currentSpeed will fall below 50% of topSpeed
             if (this.currentSpeed < this.topSpeed / 2) {
                 this.currentSpeed = this.topSpeed / 2;
+                this.y += this.currentSpeed;
+                return;
             }
             if (this.frontCar.y + this.frontCar.currentSpeed * increment - (this.y + this.LENGTH + this.currentSpeed * increment) <= 2) {
                 // collision might happen. decelerate to the speed at which collision can be prevented
@@ -119,6 +117,7 @@ public class Car {
                 idealSpeed /= increment;
                 if (idealSpeed > 0) {
                     this.currentSpeed = idealSpeed;
+                    this.y += this.currentSpeed;
                 } else {
                     System.out.println("Something bad has occured during simulation");
                 }
