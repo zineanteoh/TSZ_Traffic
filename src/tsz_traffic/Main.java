@@ -30,9 +30,11 @@ public class Main {
     // Number of trials
     public static int trials = 25;
      // Time when interrupt is allowed to kick in
-    public static double checkTime = 0.9;
+    public static double checkTime = 0.97;
     // Width of precaution
-    public static double width = 3.5;
+    public static double width = 3;
+    // Constant for influx outflux comparison
+    public static double densityCheckConstant = 1.05;
 
     public static void main(String[] args) throws InterruptedException, IOException {
         // get Files

@@ -23,7 +23,7 @@ public class Road {
     public synchronized void goCars(double increment) {
         // but we need to take into account of the delay caused by reaction time and interaction between cars
         for (Car c : this.carArray) {
-            c.go(increment, this.carArray, this.blocked);
+            c.go(increment, this.carArray, this.blocked, this);
         }
     }
 
@@ -75,16 +75,16 @@ public class Road {
         if (this.getLights().isGreen()) {
             for (int i = 0; i < this.carArray.size(); i++) {
                 if (i == 0) {
-                    if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).speed) < 5) {
+                    if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).topSpeed) < 5) {
                         this.outflux++;
                     }
                 } else {
-                    if (this.carArray.get(i).speed > this.carArray.get(i - 1).speed) {
-                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i - 1).speed) < 5) {
+                    if (this.carArray.get(i).topSpeed > this.carArray.get(i - 1).topSpeed) {
+                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i - 1).topSpeed) < 5) {
                             this.outflux++;
                         }
                     } else {
-                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).speed) < 5) {
+                        if (((this.ROAD_LENGTH - this.carArray.get(i).getY()) / this.carArray.get(i).topSpeed) < 5) {
                             this.outflux++;
                         }
                     }
@@ -103,7 +103,7 @@ public class Road {
     }
 
     public synchronized boolean densityCheck() {
-        if (this.carArray.size() > (this.ROAD_LENGTH / 19) && this.influx >= (this.outflux * 1.25)) {//25% larger because tiny spikes may exist
+        if (this.carArray.size() > (this.ROAD_LENGTH / 19) && this.influx >= (this.outflux * Main.densityCheckConstant)) {// few % larger because tiny spikes may exist
             return true;
         } else {
             return false;
