@@ -15,16 +15,22 @@ public class Car {
     public double topSpeed;
     public double currentSpeed;
     public double accelerator;
+    public double decelerator;
     private double y;
     Car frontCar;
     final static double GAP_SPACE = 2;
     final int carNumber;
 
     public Car(int index, double y) {
-        // randomize all other properties of car (length, topSpeed, accelerator)
-        this(index, y, 13 + (int) (Math.random() * (5)), 30 + (int) (Math.random() * (15)), (65 + (int) (Math.random() * 15)) / 100);
-        // car length ranges from 13 to (13+4=17) feet
-        // car topSpeed ranges from 30 to (30+14=44) feet
+        // randomize all other properties of car (length, topSpeed, accelerator, decelerator)
+        this(index, y, 
+                13 + (int) (Math.random() * (5)),           // length
+                30 + (int) (Math.random() * (15)),          // top speed
+                (75 + (int) (Math.random() * 15)) / 100.0);   // accelerator
+        // car length ranges from 13 to 17 ft
+        // car topSpeed ranges from 30 to 44 ft/sec
+        // car accelerator ranges from 0.75 to 0.89 ft/sec^2
+        // car decelerator is dependent on accelerator
     }
 
     public Car(int index, double y, double length, double topSpeed, double accelerator) {
@@ -32,9 +38,10 @@ public class Car {
         this.y = y;
         this.LENGTH = length;
         this.topSpeed = topSpeed; // in ft per second
-        this.currentSpeed = topSpeed / 2;
+        this.currentSpeed = topSpeed;
         this.frontCar = null;
         this.accelerator = accelerator;
+        this.decelerator = Double.parseDouble(String.format("%.2f",accelerator - 0.2));
     }
 
     public synchronized void go(double increment, ArrayList<Car> cars, boolean blocked, Road segment) { // increment is in seconds (e.g. 0.1 seconds)
@@ -42,32 +49,36 @@ public class Car {
         if (this.equals(cars.get(0))) {
             // this car is at the front. checkTime for blockage caused by opposing lane
             if (blocked) {
-                this.decelerate(increment);
+                this.decelerate(increment, segment);
             } else {
                 this.accelerate(increment);
             }
         } else {
-            if (this.frontCar != null && this.frontCar.y < this.y) {
-
-            }
             // this car has a car in front... let's check for possible collision
             this.frontCar = cars.get(cars.indexOf(this) - 1);
+            // if front car has stopped, this car stops too
+            if (this.frontCar.currentSpeed == 0 || (this.frontCar.y - (this.y + this.LENGTH) < GAP_SPACE)) {
+                this.currentSpeed = 0;
+                return;
+            }
             if (noPossibleCollision(increment)) {
                 // GOOD TO GO
                 this.accelerate(increment);
             } else {
-                // close in!
+                // possible collision... close in!
                 this.closeIn(increment, cars, segment);
             }
         }
     }
 
     public synchronized void closeIn(double increment, ArrayList<Car> cars, Road segment) { // this is called when traffic light is red
-
+        // get coordinate of front object
         double frontObjectYCoordinate;
-        if (this.equals(cars.get(0))) { // if this car is the first car in the segment...
+        if (this.equals(cars.get(0))) { 
+            // if this car is the first car in the segment
             frontObjectYCoordinate = segment.ROAD_LENGTH; // front 'object' is simply the end of segment
-        } else { // if this car has some car in front
+        } else { 
+            // if this car has some car in front
             this.frontCar = cars.get(cars.indexOf(this) - 1);
             frontObjectYCoordinate = this.frontCar.getY() + this.frontCar.currentSpeed * increment; // front 'object' is the car in front
         }
@@ -77,7 +88,7 @@ public class Car {
             // stop car at exactly GAP_SPACE feet away from the object 
             this.y = frontObjectYCoordinate - GAP_SPACE - this.LENGTH;
         } else {
-            this.decelerate(increment);
+            this.decelerate(increment, segment);
         }
     }
 
@@ -88,38 +99,42 @@ public class Car {
             this.y += this.currentSpeed * increment;
         } else {
             this.currentSpeed = this.topSpeed;
+            this.y += this.currentSpeed * increment;
         }
     }
 
-    public synchronized void decelerate(double increment) {
-        // check if decelerating will prevent collision with front car first
+    public synchronized void decelerate(double increment, Road segment) {
         if (this.frontCar == null) {
-            // no front car to compare. decelerate normally
-            if (this.currentSpeed - this.accelerator > 0) {
-                this.currentSpeed -= this.accelerator;
+            // if frontCar == null, this car is blocked by the crossroad. need to slow down / stop
+            if (this.y + this.currentSpeed * increment + GAP_SPACE < segment.ROAD_LENGTH && this.currentSpeed - this.decelerator > 0) {
+                // if this car is still a little far from crossroad && this car can decelerate
+                this.currentSpeed -= this.decelerator;
                 this.y += this.currentSpeed * increment;
+            } else {
+                // this car is pretty damn close to the crossroad. stop it at this instant! 
+                this.currentSpeed = 0;
             }
-            return;
-        }
-        if ((this.currentSpeed - this.accelerator > 0) && (this.frontCar.y + this.frontCar.currentSpeed * increment - (this.y + this.LENGTH + this.currentSpeed * increment) < 2)) {
-            this.currentSpeed -= this.accelerator;
-            this.y += this.currentSpeed * increment;
         } else {
-            // either collision might take place or currentSpeed will fall below 50% of topSpeed
-            if (this.currentSpeed < this.topSpeed / 2) {
-                this.currentSpeed = this.topSpeed / 2;
-                this.y += this.currentSpeed;
-                return;
-            }
-            if (this.frontCar.y + this.frontCar.currentSpeed * increment - (this.y + this.LENGTH + this.currentSpeed * increment) <= 2) {
-                // collision might happen. decelerate to the speed at which collision can be prevented
-                double idealSpeed = this.frontCar.y + this.frontCar.currentSpeed * increment - 2 - this.y - this.LENGTH;
-                idealSpeed /= increment;
-                if (idealSpeed > 0) {
-                    this.currentSpeed = idealSpeed;
-                    this.y += this.currentSpeed;
+            // Goal: check front car speed and distance to decelerate accordingly
+            if (this.frontCar.currentSpeed == 0 || (this.frontCar.y - (this.y + this.LENGTH) < GAP_SPACE)) {
+                // front car has stopped within distance. stop this car too
+                this.currentSpeed = 0;
+            } else {
+                // Goal: slow down this car based on front car speed and distance
+                if (this.frontCar.y + this.frontCar.currentSpeed * increment - (this.y + this.LENGTH + this.currentSpeed * increment) <= GAP_SPACE) {
+                    // a collision might happen. decelerate to the speed at which collision can be prevented
+                    double idealSpeed = this.frontCar.y + this.frontCar.currentSpeed * increment - (GAP_SPACE + this.y + this.LENGTH);
+                    idealSpeed /= increment;
+                    if (idealSpeed > 0) {
+                        this.currentSpeed = idealSpeed;
+                        this.y += this.currentSpeed * increment;
+                    } else {
+                        this.currentSpeed = 0;
+                    }
                 } else {
-                    System.out.println("Something bad has occured during simulation");
+                    // front car and this car is within safe distance, decelerate normally
+                    this.currentSpeed -= this.decelerator;
+                    this.y += this.currentSpeed * increment;
                 }
             }
         }

@@ -83,7 +83,7 @@ public class Data extends Thread {
                     writer.close();
 
                     // verticalPassed1, 2, 3.dat
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < this.crossroadCount; i++) {
                         writer = new FileWriter(fileNames[i + 2], true);
                         writer.write(getVerticalPassed(i) + " ");
                         writer.write("\n");
@@ -91,7 +91,7 @@ public class Data extends Thread {
                     }
 
                     // verticalOutflux1, 2, 3.dat
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < this.crossroadCount; i++) {
                         writer = new FileWriter(fileNames[i + 5], true);
                         writer.write(getVerticalOutflux(i) + " ");
                         writer.write("\n");

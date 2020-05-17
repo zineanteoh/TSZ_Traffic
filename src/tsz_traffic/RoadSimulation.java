@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class RoadSimulation extends Thread {
 
     private static int POPULATE_GAP = 20; // Distance between each populated car in feet 
+    public static double width = 1; // Width of precaution
     public int carCounter;
     final int DIRECTION;
     public RoadSimulation oppositeRoad;
@@ -69,14 +70,78 @@ public class RoadSimulation extends Thread {
         }
     }
 
-    // For linking road segments within a crossroad
-    public synchronized void setOppositeRoad(RoadSimulation road) {
-        this.oppositeRoad = road;
+    private synchronized void updateLightOfRoad(double time, int index, ArrayList<Road> roadArray) {
+        if (index == 0) {
+            // Index = 0 means that this road is the first segment 
+            // No density check required because there are no roads infront
+            // Call simple update time instead
+            roadArray.get(index).simpleUpdate(time);
+        } else {
+            // Check conditions to see if traffic light could be interrupted
+            if (!roadArray.get(index).checkCondition(time) || !roadArray.get(index).getLights().isGreen()) {
+                // One or more of the conditions are false. Call simple update time instead
+                roadArray.get(index).simpleUpdate(time);
+                return;
+            }
+
+            // Apply densityCheck() on the road segment behind roadArray[index]
+            if (roadArray.get(index - 1).densityCheck() && Crossroad.interrupt) {
+                // All 3 conditions have been met. Proceed to interrupting light
+                roadArray.get(index).getLights().interrupt();
+                System.out.printf("Traffic Light of Thread %s (road index %d, direction %d) has been Interrupted!%n", (this.lock.flag), index, this.DIRECTION);
+                return;
+            }
+
+            // DensityCheck() returns false. Call simple update time instead
+            roadArray.get(index).simpleUpdate(time);
+        }
     }
 
-    // For linking crossroads
-    public synchronized void setRightRoad(RoadSimulation road) {
-        this.rightRoad = road;
+    private synchronized void updateCarOfRoad(int index, ArrayList<Road> roadArray) {
+//        // Removed
+//        // Check the front road (index 0) for blocked crossroad
+//        if (index == 0 && !roadArray.get(index).carArray.isEmpty()) {
+//            // Check the y coordinate of the last car
+//            double lastCarY = roadArray.get(index).getLastCar().getY();
+//            if (lastCarY < this.roadWidth * this.width) {
+//                // opposing lane is blocked
+//                this.oppositeRoad.roadArray.get(1).setBlocked(true);
+//            } else {
+//                // opposing lane is not blocked
+//                this.oppositeRoad.roadArray.get(1).setBlocked(false);
+//            }
+//        }
+
+        // If Green light, get cars to go
+        // If Red light, get cars to slow down and close in
+        if (roadArray.get(index).getLights().isGreen()) {
+            roadArray.get(index).goCars(Crossroad.TIME_INCREMENT);
+        } else {
+            roadArray.get(index).closeInCars(Crossroad.TIME_INCREMENT);
+        }
+    }
+
+    private synchronized void updateRoadArray(int index, ArrayList<Road> roadArray, RoadSimulation rr) {
+        // Check to see if any cars have 'exited' this road segment (its relative coordinate exceeded the road length)
+        if (roadArray.get(index).carExit()) {
+            this.totalCarPassed++;
+            // Get the front most car from this road segment
+            Car frontCar = roadArray.get(index).getFrontCar();
+            // Remove this car object from this road segment
+            roadArray.get(index).removeCar(frontCar);
+            // Add this car object to the road segment infront if there is one available (when index > 0)
+            if (index > 0) {
+                // Set this car's y coordinate to 0
+                frontCar.resetY();
+                roadArray.get(index - 1).addCar(frontCar);
+            } else {
+                if (this.DIRECTION == Road.HORIZONTAL && rr != null) {
+                    // Add to the left horizontal segment of the next crossroad
+                    frontCar.resetY();
+                    rr.roadArray.get(0).addCar(frontCar);
+                }
+            }
+        }
     }
 
     private synchronized ArrayList<Road> populateRoadArray(ArrayList<Road> roadArray, int[] roadData, Light[] lightData, int direction) {
@@ -105,79 +170,6 @@ public class RoadSimulation extends Thread {
         return roadSegment;
     }
 
-    private synchronized void updateLightOfRoad(double time, int index, ArrayList<Road> roadArray) {
-        if (index == 0) {
-            // Index = 0 means that this road is the first segment 
-            // No density check required because there are no roads infront
-            // Call simple update time instead
-            roadArray.get(index).simpleUpdate(time);
-        } else {
-            // Check conditions to see if traffic light could be interrupted
-            if (!roadArray.get(index).checkCondition(time) || !roadArray.get(index).getLights().isGreen()) {
-                // One or more of the conditions are false. Call simple update time instead
-                roadArray.get(index).simpleUpdate(time);
-                return;
-            }
-
-            // Apply densityCheck() on the road segment behind roadArray[index]
-            if (roadArray.get(index - 1).densityCheck() && Crossroad.interrupt) {
-                // All 3 conditions have been met. Proceed to interrupting light
-                roadArray.get(index).getLights().interrupt();
-                System.out.printf("Traffic Light of Thread %s (road index %d, direction %d) has been Interrupted!%n", (this.lock.flag), index, this.DIRECTION);
-                return;
-            }
-            
-            // DensityCheck() returns false. Call simple update time instead
-            roadArray.get(index).simpleUpdate(time);
-        }
-    }
-
-    private synchronized void updateCarOfRoad(int index, ArrayList<Road> roadArray) {
-        // If Green light, get cars to go
-        // If Red light, get cars to slow down and close in
-        if (roadArray.get(index).getLights().isGreen()) {
-            roadArray.get(index).goCars(Crossroad.TIME_INCREMENT);
-        } else {
-            roadArray.get(index).closeInCars(Crossroad.TIME_INCREMENT);
-        }
-
-        // Check the front road (index 0) for blocked crossroad
-        if (index == 0 && !roadArray.get(index).carArray.isEmpty()) {
-            // Check the y coordinate of the last car
-            double lastCarY = roadArray.get(index).getLastCar().getY();
-            if (lastCarY <= this.roadWidth * Main.width) {
-                // opposing lane is blocked
-                this.oppositeRoad.roadArray.get(1).setBlocked(true);
-            } else {
-                // opposing lane is not blocked
-                this.oppositeRoad.roadArray.get(1).setBlocked(false);
-            }
-        }
-    }
-
-    private synchronized void updateRoadArray(int index, ArrayList<Road> roadArray, RoadSimulation rr) {
-        // Check to see if any cars have 'exited' this road segment (its relative coordinate exceeded the road length)
-        if (roadArray.get(index).carExit()) {
-            this.totalCarPassed++;
-            // Get the front most car from this road segment
-            Car frontCar = roadArray.get(index).getFrontCar();
-            // Remove this car object from this road segment
-            roadArray.get(index).removeCar(frontCar);
-            // Add this car object to the road segment infront if there is one available (when index > 0)
-            if (index > 0) {
-                // Set this car's y coordinate to 0
-                frontCar.resetY();
-                roadArray.get(index - 1).addCar(frontCar);
-            } else {
-                if (this.DIRECTION == Road.HORIZONTAL && rr != null) {
-                    // Add to the left horizontal segment of the next crossroad
-                    frontCar.resetY();
-                    rr.roadArray.get(0).addCar(frontCar);
-                }
-            }
-        }
-    }
-
     private synchronized void makeTrafficWorse(ArrayList<Road> roadArray) {
         int lastRoadIndex = roadArray.size() - 1;
         int lastCarIndex = roadArray.get(lastRoadIndex).carArray.size() - 1;
@@ -188,6 +180,16 @@ public class RoadSimulation extends Thread {
             Car tempCar = new Car(this.carCounter++, lastCarCoordinate + (POPULATE_GAP));
             roadArray.get(lastRoadIndex).addCar(tempCar);
         }
+    }
+
+    // For linking road segments within a crossroad
+    public synchronized void setOppositeRoad(RoadSimulation road) {
+        this.oppositeRoad = road;
+    }
+
+    // For linking crossroads
+    public synchronized void setRightRoad(RoadSimulation road) {
+        this.rightRoad = road;
     }
 
     public synchronized int getTotalCarPassed() {

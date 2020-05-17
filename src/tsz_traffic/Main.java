@@ -22,13 +22,11 @@ public class Main {
     // Simulation duration, in seconds
     public static double simulationTime = 240;
     // Implement Solution or not (false = status quo)
-    public static boolean implementSolution = true;
+    public static boolean implementSolution = false;
     // Number of trials
     public static int trials = 25;
      // Time when interrupt is allowed to kick in
     public static double checkTime = 0.97;
-    // Width of precaution
-    public static double width = 3;
     // Constant for influx outflux comparison
     public static double densityCheckConstant = 1.10;
 
@@ -189,30 +187,30 @@ public class Main {
         Light[] verticalLight1 = new Light[2];
 
         // Add crossroad #1
-        horizontalLight1[0] = new Light(Light.GREEN, 30, 0);   // traffic light for end of left segment 
-        horizontalLight1[1] = new Light(Light.GREEN, 30, 15);   // traffic light for end of right segment
+        horizontalLight1[0] = new Light(Light.RED, 30, 0);   // traffic light for end of left segment 
+        horizontalLight1[1] = new Light(Light.RED, 30, 0);   // traffic light for end of right segment
         verticalLight1[0] = new Light(Light.GREEN, 30, 0);      // traffic light for end of top segment
-        verticalLight1[1] = new Light(Light.GREEN, 30, 15);      // traffic light for end of bottom segment
+        verticalLight1[1] = new Light(Light.GREEN, 30, 0);      // traffic light for end of bottom segment
         cr.addCrossroad(horizontalRoad, horizontalLight1, verticalRoad, verticalLight1);
 
         // Add crossroad #2 (to the right of cr#1)
         Light[] horizontalLight2 = new Light[2];
         Light[] verticalLight2 = new Light[2];
         int[] horizontalRoad2 = new int[]{850, 700};
-        horizontalLight2[0] = new Light(Light.GREEN, 30, 0);   // traffic light for end of left segment 
-        horizontalLight2[1] = new Light(Light.GREEN, 30, 15);   // traffic light for end of right segment
+        horizontalLight2[0] = new Light(Light.RED, 30, 0);   // traffic light for end of left segment 
+        horizontalLight2[1] = new Light(Light.RED, 30, 0);   // traffic light for end of right segment
         verticalLight2[0] = new Light(Light.GREEN, 30, 0);      // traffic light for end of top segment
-        verticalLight2[1] = new Light(Light.GREEN, 30, 15);      // traffic light for end of bottom segment
+        verticalLight2[1] = new Light(Light.GREEN, 30, 0);      // traffic light for end of bottom segment
         cr.addCrossroad(horizontalRoad2, horizontalLight2, verticalRoad, verticalLight2);
 
         // Add crossroad #3 (to the right of cr#2)
         Light[] horizontalLight3 = new Light[2];
         Light[] verticalLight3 = new Light[2];
         int[] horizontalRoad3 = new int[]{700, 600};
-        horizontalLight3[0] = new Light(Light.GREEN, 30, 0);   // traffic light for end of left segment 
-        horizontalLight3[1] = new Light(Light.GREEN, 30, 15);   // traffic light for end of right segment
+        horizontalLight3[0] = new Light(Light.RED, 30, 0);   // traffic light for end of left segment 
+        horizontalLight3[1] = new Light(Light.RED, 30, 0);   // traffic light for end of right segment
         verticalLight3[0] = new Light(Light.GREEN, 30, 0);      // traffic light for end of top segment
-        verticalLight3[1] = new Light(Light.GREEN, 30, 15);      // traffic light for end of bottom segment
+        verticalLight3[1] = new Light(Light.GREEN, 30, 0);      // traffic light for end of bottom segment
         cr.addCrossroad(horizontalRoad3, horizontalLight3, verticalRoad, verticalLight3);
 
         // Simulate the crossroad
