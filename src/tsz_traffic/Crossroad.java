@@ -50,7 +50,7 @@ public class Crossroad {
         // Thread arrays
         this.horizontalThreads = new ArrayList<Thread>();
         this.verticalThreads = new ArrayList<Thread>();
-
+        
     }
 
     public void addCrossroad(int[] horizontalRoad, Light[] horizontalLight, int[] verticalRoad, Light[] verticalLight) {

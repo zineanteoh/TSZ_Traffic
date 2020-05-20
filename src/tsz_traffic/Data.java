@@ -48,7 +48,6 @@ public class Data extends Thread {
         } catch (IOException e) {
             System.out.println("An error has occured.");
         }
-        
     }
     
 
@@ -110,13 +109,15 @@ public class Data extends Thread {
     }
 
     public synchronized int getHorizontalPassed() {
-        int total = 0;
-        for (int i = 0; i < this.crossroadCount; i++) {
-            total += ((RoadSimulation)this.horizontalThreads.get(i)).getTotalCarPassed();
-        }
-        return total;
+        return ((RoadSimulation)this.horizontalThreads.get(this.crossroadCount - 1)).getTotalCarPassed();
     }
 
+    
+//        int total = 0;
+//        for (int i = 0; i < this.crossroadCount; i++) {
+//            total += ((RoadSimulation)this.horizontalThreads.get(i)).getTotalCarPassed();
+//        }
+    
     public synchronized int getVerticalPassed(int index) {
         return ((RoadSimulation) this.verticalThreads.get(index)).getTotalCarPassed();
 
