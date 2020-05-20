@@ -22,7 +22,7 @@ public class Main {
     // Simulation duration, in seconds
     public static double simulationTime = 240;
     // Implement Solution or not (false = status quo)
-    public static boolean implementSolution = false;
+    public static boolean implementSolution = true;
     // Number of trials
     public static int trials = 25;
      // Time when interrupt is allowed to kick in

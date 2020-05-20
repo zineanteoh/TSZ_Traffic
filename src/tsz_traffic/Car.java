@@ -49,7 +49,9 @@ public class Car {
         if (this.equals(cars.get(0))) {
             // this car is at the front. checkTime for blockage caused by opposing lane
             if (blocked) {
-                this.decelerate(increment, segment);
+                // Stop.
+                this.currentSpeed = 0;
+//                this.decelerate(increment, segment);
             } else {
                 this.accelerate(increment);
             }

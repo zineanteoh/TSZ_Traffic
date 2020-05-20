@@ -98,19 +98,19 @@ public class RoadSimulation extends Thread {
     }
 
     private synchronized void updateCarOfRoad(int index, ArrayList<Road> roadArray) {
-//        // Removed
-//        // Check the front road (index 0) for blocked crossroad
-//        if (index == 0 && !roadArray.get(index).carArray.isEmpty()) {
-//            // Check the y coordinate of the last car
-//            double lastCarY = roadArray.get(index).getLastCar().getY();
-//            if (lastCarY < this.roadWidth * this.width) {
-//                // opposing lane is blocked
-//                this.oppositeRoad.roadArray.get(1).setBlocked(true);
-//            } else {
-//                // opposing lane is not blocked
-//                this.oppositeRoad.roadArray.get(1).setBlocked(false);
-//            }
-//        }
+        // Removed
+        // Check the front road (index 0) for blocked crossroad
+        if (index == 0 && !roadArray.get(index).carArray.isEmpty()) {
+            // Check the y coordinate of the last car
+            double lastCarY = roadArray.get(index).getLastCar().getY();
+            if (lastCarY < this.roadWidth * this.width) {
+                // opposing lane is blocked
+                this.oppositeRoad.roadArray.get(1).setBlocked(true);
+            } else {
+                // opposing lane is not blocked
+                this.oppositeRoad.roadArray.get(1).setBlocked(false);
+            }
+        }
 
         // If Green light, get cars to go
         // If Red light, get cars to slow down and close in
