@@ -3,12 +3,15 @@
 **2019-2020 Academic Year**
 
 **Team consists of:**
+
 (T)ommy Hu, (S)elena Hong, (Z)i Nean Teoh - TapSapZap
 
 **Project Goal:**
+
 Resolving Traffic Congestion
 
 **Presentation Link (Presented on May 20th, 2020):**
+
 https://docs.google.com/presentation/d/1M0al5yvgx2G_bdvcibvUXyQw_-sWrkjM0bIt72KD6pk/edit?usp=sharing
 
 **Abstract:**
